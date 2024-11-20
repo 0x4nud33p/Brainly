@@ -1,18 +1,39 @@
 import axios from "axios";
 import toast from 'react-hot-toast';
-import { useState, useCallback, useMemo } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
-    email: "",
+    username: "",
     password: "",
   });
   const [formError, setFormError] = useState(null);
   const navigate = useNavigate();
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    try {
+      toast.loading("Logging In...");
+      const response = await axios.post(
+        `${import.meta.env.VITE_PRODUCTION_URL}/api/v1/user/signin`, 
+        formData
+      );
+      toast.success("Logged in successfully!");
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("userid",response.data.userid);
+      navigate("/content");
+    } catch (error) {
+      toast.error("Error while logging in");
+      setFormError(error.response?.data?.message || "An unexpected error occurred");
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="bg-gradient-to-b from-gray-900 to-gray-800 text-white mt-[80px] min-h-[670px]">
@@ -26,18 +47,19 @@ export default function Login() {
             </Link>
           </p>
         </div>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="space-y-4">
             <div className="space-y-2">
-              <label htmlFor="email" className="text-white block font-medium">
-                Email
+              <label htmlFor="username" className="text-white block font-medium">
+                username
               </label>
               <input
-                id="email"
-                type="email"
-                placeholder="m@example.com"
+                id="username"
+                type="text"
+                placeholder="username"
                 required
-                value={formData.email}
+                value={formData.username}
+                onChange={(e) => setFormData({ ...formData, username: e.target.value })}
                 className="w-full px-3 py-2 text-black border border-gray-300 rounded"
               />
               {formError && <p className="text-red-500 text-sm">{formError}</p>}
@@ -52,6 +74,7 @@ export default function Login() {
                   type={showPassword ? "text" : "password"}
                   required
                   value={formData.password}
+                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                   className="w-full px-3 py-2 text-black border border-gray-300 rounded"
                 />
                 <button
@@ -69,7 +92,7 @@ export default function Login() {
               aria-busy={isLoading}
               className="px-8 py-3 ml-16 rounded-lg bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-semibold transform transition-all hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-gray-900"
             >
-              Sign In
+              {isLoading ? "Signing In..." : "Sign In"}
             </button>
           </div>
         </form>
