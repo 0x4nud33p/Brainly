@@ -13,13 +13,15 @@ const port  =  process.env.PORT || 3000;
 connectDB();
 
 app.use(express.json());
+app.use("/api/v1/user",userRoutes);
+
+
+app.get("/", (req, res) => {
+  res.send("server running");
+});  
 
 app.listen(port, () => {
   console.log(`http://localhost:${port}`);
 });
 
-app.use("/api/v1/user",userRoutes);
 
-app.get("/",(req,res) => {
-  res.send("server running");
-})  

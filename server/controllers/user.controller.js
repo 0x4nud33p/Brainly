@@ -1,16 +1,19 @@
 import Content from "../models/content.model.js";
+import mongoose from "mongoose";
 
-const addContent = async (req, res) => {
-  const { link, title, tags, userId } = req.body;
+const addCollection = async (req, res) => {
+  const { link, title, tags, userId, content } = req.body;
 
-  if (!link || !title || !userId) {
-    return res.status(400).send({
-      message: "Link, Title, and UserId are required fields",
+  if (!link || !title || !userId || !content) {
+    return res.status(400).json({
+      message: "Link, Title, and UserId content are required fields",
     });
   }
 
+
   try {
-    const newContent = await Content.create({ link, title, tags, userId });
+    const objectIdUserId = new mongoose.Types.ObjectId(userId);
+    const newContent = await Content.create({ link, title, tags, userId : objectIdUserId, content });
     return res.status(201).send({
       message: "Content added successfully",
       content: newContent,
@@ -26,11 +29,15 @@ const addContent = async (req, res) => {
 
 const getContentDetails = async (req, res) => {
   const { id } = req.params;
-
+  
   if (!id) {
     return res
-      .status(400)
-      .send({ message: "Please provide the ID in the params" });
+    .status(400)
+    .send({ message: "Please provide the ID in the params" });
+  }
+
+  if (!mongoose.isValidObjectId(id)) {
+    return res.status(400).send({ message: "Invalid ID format" });
   }
 
   try {
@@ -52,4 +59,4 @@ const getContentDetails = async (req, res) => {
 };
 
 
-export { addContent, getContentDetails };
+export { addCollection, getContentDetails };

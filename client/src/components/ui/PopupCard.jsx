@@ -1,16 +1,42 @@
 import React, { useState } from "react";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 function PopupCard({ isOpen, onClose }) {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [link, setLink] = useState("");
 
-  const handleFormSubmit = (e) => {
-    e.preventDefault(); 
-    console.log("Title:", title);
-    console.log("Content:", content);
-    console.log("Link:", link);
-    onClose();
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!title || !content || !link) {
+      toast.error("All fields are required");
+      return;
+    }
+
+    const token = localStorage.getItem("token");
+    const userid = localStorage.getItem("userid");
+
+    try {
+      const loadingToast = toast.loading("Adding collection...");
+      await axios.post(
+        `${import.meta.env.VITE_PRODUCTION_URL}/api/v1/user/addcollection`,
+        { title, content, link, userid },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      toast.dismiss(loadingToast);
+      toast.success("Collection added successfully!");
+      onClose();
+    } catch (error) {
+      toast.dismiss(); 
+      toast.error("Error while adding collection");
+      console.error(error);
+    }
   };
 
   if (!isOpen) return null;

@@ -11,6 +11,10 @@ const contentSchema = new mongoose.Schema({
     type: String,
     trim: true,
   },
+  content : {
+    type : String,
+    trim : true,
+  },
   tags: [
     {
       type: mongoose.Schema.Types.ObjectId,
