@@ -1,5 +1,6 @@
 import Content from "../models/content.model.js";
 import mongoose from "mongoose";
+import { Types } from "mongoose";
 
 const addCollection = async (req, res) => {
   const { link, title, tags, userId, content } = req.body;
@@ -12,7 +13,7 @@ const addCollection = async (req, res) => {
 
 
   try {
-    const objectIdUserId = new mongoose.Types.ObjectId(userId);
+    const objectIdUserId = new mongoose.Types.ObjectId(`${userId}`);
     const newContent = await Content.create({ link, title, tags, userId : objectIdUserId, content });
     return res.status(201).send({
       message: "Content added successfully",

@@ -6,14 +6,17 @@ const contentSchema = new mongoose.Schema({
   link: {
     type: String,
     trim: true,
+    required: [true, "Link is required"],
   },
   title: {
     type: String,
     trim: true,
+    required: [true, "Title is required"],
   },
-  content : {
-    type : String,
-    trim : true,
+  content: {
+    type: String,
+    trim: true,
+    required: [true, "Content is required"],
   },
   tags: [
     {
@@ -25,8 +28,10 @@ const contentSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: User,
+    required: [true, "User ID is required"],
   },
 });
+
 
 const Content = mongoose.model("Content", contentSchema);
 

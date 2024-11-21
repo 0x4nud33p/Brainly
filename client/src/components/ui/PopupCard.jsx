@@ -20,9 +20,11 @@ function PopupCard({ isOpen, onClose }) {
 
     try {
       const loadingToast = toast.loading("Adding collection...");
+      console.log(`${import.meta.env.VITE_PRODUCTION_URL}/api/v1/user/addcollection`);
+      console.log(`Bearer ${localStorage.getItem("token")}`);
       await axios.post(
         `${import.meta.env.VITE_PRODUCTION_URL}/api/v1/user/addcollection`,
-        { title, content, link, userid },
+        { title, content, link, userId: userid },
         {
           headers: {
             Authorization: `Bearer ${token}`,
