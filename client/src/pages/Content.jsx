@@ -1,11 +1,44 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Card from '../components/ui/Card';
-import { sampleCards } from '../components/ui/Sample.js';
 import { Plus } from "lucide-react";
 import PopupCard from '../components/ui/PopUpCard.jsx';
+import axios from 'axios';
+import toast from 'react-hot-toast';
 
 function Content() {
   const [isOpen, setIsOpen] = useState(false);
+  const [sampleCards, setSampleCard] = useState([]);
+
+  useEffect(() => {
+    const fetchCollections = async () => {
+      try {
+        const toastloading = toast.loading("Retrieving Your Collections");
+        const userId = localStorage.getItem("userid");
+        const token = localStorage.getItem("token");
+
+        const { data: collections } = await axios.post(
+          `${import.meta.env.VITE_PRODUCTION_URL}/api/v1/user/getallcollections`,
+          { userId },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        setSampleCard(collections);
+        console.log(sampleCards);
+        await toast.dismiss(toastloading);
+        toast.success("Collections retrieved successfully!");
+      } catch (error) {
+        console.error(error);
+        toast.dismiss();
+        toast.error("Error while retrieving your collections");
+      }
+    };
+
+    fetchCollections();
+  }, []);
 
   const togglePopup = () => {
     setIsOpen((prev) => !prev);
@@ -28,12 +61,13 @@ function Content() {
         </div>
         <PopupCard isOpen={isOpen} onClose={togglePopup} />
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-          {sampleCards.map((card) => (
+          {sampleCards?.map((card) => (
             <Card
-              key={card.id}
+              key={card._id || card.title}
               title={card.title}
               content={card.content}
               tags={card.tags}
+              link={card.link}
               onShare={() => console.log('Share:', card.title)}
               onCopy={() => console.log('Copied:', card.title)}
               onEdit={() => console.log('Edit:', card.title)}

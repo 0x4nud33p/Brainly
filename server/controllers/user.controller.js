@@ -28,7 +28,36 @@ const addCollection = async (req, res) => {
 };
 
 
-const getContentDetails = async (req, res) => {
+const getAllCollections = async (req, res) => {
+  const { userId } = req.body;
+  const objectIdUserId = new mongoose.Types.ObjectId(`${userId}`);
+
+  if (!objectIdUserId) {
+    return res.status(400).json({ message: "userId is required" });
+  }
+
+  try {
+    const collections = await Content.find({
+      userId: objectIdUserId,
+    });
+
+    if (collections.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "User does not have any collections" });
+    }
+
+    return res.status(200).json(collections);
+  } catch (error) {
+    console.error("Error while fetching collections", error);
+    return res
+      .status(500)
+      .json({ message: "Internal Server Error", error: error.message });
+  }
+};
+
+
+const getContentById = async (req, res) => {
   const { id } = req.params;
   
   if (!id) {
@@ -60,4 +89,4 @@ const getContentDetails = async (req, res) => {
 };
 
 
-export { addCollection, getContentDetails };
+export { addCollection, getContentById, getAllCollections };

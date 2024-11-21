@@ -5,6 +5,7 @@ export default function Card({
   title,
   content,
   tags,
+  link,
   onShare,
   onCopy,
   onEdit,
@@ -68,6 +69,14 @@ export default function Card({
           </div>
         </div>
         <p className="text-gray-300 mb-4 line-clamp-3">{content}</p>
+        <a
+          href={link}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-purple-400 hover:text-blue-500 transition-colors cursor-pointer duration-300"
+        >
+          Visit Your Link
+        </a>
         <div className="flex flex-wrap gap-2">
           {tags.map((tag) => (
             <span
