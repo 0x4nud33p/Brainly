@@ -6,17 +6,13 @@ export default function Card({
   content,
   tags,
   link,
+  id,
   onShare,
-  onCopy,
   onEdit,
   onDelete,
 }) {
   const [showOptions, setShowOptions] = useState(false);
-
-  const handleCopy = () => {
-    navigator.clipboard.writeText(content);
-    onCopy?.();
-  };
+  
 
   return (
     <div className="group relative bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl p-6 hover:border-purple-500/50 transition-all duration-300">
@@ -41,13 +37,6 @@ export default function Card({
                   >
                     <Share2 className="w-4 h-4 mr-3" />
                     Share
-                  </button>
-                  <button
-                    onClick={handleCopy}
-                    className="flex items-center w-full px-4 py-2 text-sm text-gray-300 hover:bg-gray-700/50"
-                  >
-                    <Copy className="w-4 h-4 mr-3" />
-                    Copy
                   </button>
                   <button
                     onClick={onEdit}
@@ -77,7 +66,7 @@ export default function Card({
         >
           Visit Your Link
         </a>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2 mt-4">
           {tags.map((tag) => (
             <span
               key={tag.id}

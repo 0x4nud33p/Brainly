@@ -5,9 +5,20 @@ import PopupCard from '../components/ui/PopUpCard.jsx';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
+
 function Content() {
   const [isOpen, setIsOpen] = useState(false);
   const [sampleCards, setSampleCard] = useState([]);
+  const sampleTags =  [
+        { id: '1', name: '#sample-tags', color: 'bg-blue-500/20 text-blue-300' },
+        { id: '2', name: '#sample-tags', color: 'bg-purple-500/20 text-purple-300' }
+      ];
+
+   const handleShare = (id) => {
+    const shareLink = `${import.meta.env.VITE_PRODUCTION_URL}/content/${id}`;
+    navigator.clipboard.writeText(shareLink);
+    alert('Link copied to clipboard');
+  };
 
   useEffect(() => {
     const fetchCollections = async () => {
@@ -66,10 +77,10 @@ function Content() {
               key={card._id || card.title}
               title={card.title}
               content={card.content}
-              tags={card.tags}
+              tags={sampleTags}
               link={card.link}
-              onShare={() => console.log('Share:', card.title)}
-              onCopy={() => console.log('Copied:', card.title)}
+              id={card._id}
+              onShare={handleShare}
               onEdit={() => console.log('Edit:', card.title)}
               onDelete={() => console.log('Delete:', card.title)}
             />

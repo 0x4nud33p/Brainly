@@ -11,10 +11,15 @@ const addCollection = async (req, res) => {
     });
   }
 
-
   try {
     const objectIdUserId = new mongoose.Types.ObjectId(`${userId}`);
-    const newContent = await Content.create({ link, title, tags, userId : objectIdUserId, content });
+    const newContent = await Content.create({
+      link,
+      title,
+      tags,
+      userId: objectIdUserId,
+      content,
+    });
     return res.status(201).send({
       message: "Content added successfully",
       content: newContent,
@@ -26,7 +31,6 @@ const addCollection = async (req, res) => {
       .send({ message: "Error While Adding Content", error: error.message });
   }
 };
-
 
 const getAllCollections = async (req, res) => {
   const { userId } = req.body;
@@ -56,22 +60,23 @@ const getAllCollections = async (req, res) => {
   }
 };
 
-
 const getContentById = async (req, res) => {
   const { id } = req.params;
-  
-  if (!id) {
+
+  const objectIdUserId = new mongoose.Types.ObjectId(`${id}`);
+
+  if (!objectIdUserId) {
     return res
-    .status(400)
-    .send({ message: "Please provide the ID in the params" });
+      .status(400)
+      .send({ message: "Please provide the ID in the params" });
   }
 
-  if (!mongoose.isValidObjectId(id)) {
-    return res.status(400).send({ message: "Invalid ID format" });
-  }
+  // if (!mongoose.isValidObjectId(id)) {
+  //   return res.status(400).send({ message: "Invalid ID format" });
+  // }
 
   try {
-    const content = await Content.findById(id);
+    const content = await Content.findById(objectIdUserId);
 
     if (!content) {
       return res
@@ -87,6 +92,5 @@ const getContentById = async (req, res) => {
       .send({ message: "Internal Server Error", error: error.message });
   }
 };
-
 
 export { addCollection, getContentById, getAllCollections };
