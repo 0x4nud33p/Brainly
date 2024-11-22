@@ -5,6 +5,7 @@ import Home from './components/Home.jsx'
 import Content from './pages/Content.jsx'
 import Login from './auth/Login.jsx';
 import Signup from './auth/Signup.jsx'
+import PublicCollection from './pages/PublicCollection.jsx';
 
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
         <Route path='/content' element={<Content />} />
         <Route path='/signup' element={<Signup />} />
         <Route path='/login' element={<Login />} />
+        <Route path='/content/:id' element={<PublicCollection />} />
         </Route>
       </Routes>
     </BrowserRouter>

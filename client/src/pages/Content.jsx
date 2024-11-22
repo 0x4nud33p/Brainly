@@ -10,14 +10,14 @@ function Content() {
   const [isOpen, setIsOpen] = useState(false);
   const [sampleCards, setSampleCard] = useState([]);
   const sampleTags =  [
-        { id: '1', name: '#sample-tags', color: 'bg-blue-500/20 text-blue-300' },
+        { id: '1', name: '#tags-comming-soon', color: 'bg-blue-500/20 text-blue-300' },
         { id: '2', name: '#sample-tags', color: 'bg-purple-500/20 text-purple-300' }
       ];
 
    const handleShare = (id) => {
     const shareLink = `${import.meta.env.VITE_PRODUCTION_URL}/content/${id}`;
     navigator.clipboard.writeText(shareLink);
-    alert('Link copied to clipboard');
+    toast.success('Link copied to clipboard');
   };
 
   useEffect(() => {
@@ -38,8 +38,7 @@ function Content() {
         );
 
         setSampleCard(collections);
-        console.log(sampleCards);
-        await toast.dismiss(toastloading);
+        toast.dismiss(toastloading);
         toast.success("Collections retrieved successfully!");
       } catch (error) {
         console.error(error);
@@ -80,7 +79,7 @@ function Content() {
               tags={sampleTags}
               link={card.link}
               id={card._id}
-              onShare={handleShare}
+              onShare={() => handleShare(card._id)}
               onEdit={() => console.log('Edit:', card.title)}
               onDelete={() => console.log('Delete:', card.title)}
             />
