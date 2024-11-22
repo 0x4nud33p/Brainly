@@ -71,10 +71,6 @@ const getContentById = async (req, res) => {
       .send({ message: "Please provide the ID in the params" });
   }
 
-  // if (!mongoose.isValidObjectId(id)) {
-  //   return res.status(400).send({ message: "Invalid ID format" });
-  // }
-
   try {
     const content = await Content.findById(objectIdUserId);
 
@@ -93,4 +89,23 @@ const getContentById = async (req, res) => {
   }
 };
 
-export { addCollection, getContentById, getAllCollections };
+const deleteContentById = async (req, res) => {
+  const { contentid } = req.body;
+
+  try {
+    const objectid = new mongoose.Types.ObjectId(`${contentid}`); 
+    const contentToBeDeleted = await Content.deleteOne({ _id: objectid }); 
+
+    if (contentToBeDeleted.deletedCount === 0) {
+      return res.status(404).json({ message: "Collection not found" });
+    }
+
+    res.status(200).json({ message: "Collection deleted successfully" });
+  } catch (error) {
+    console.error("Error While Deleting:", error.message);
+    return res.status(500).json({ message: "Error while deleting collection" });
+  }
+};
+
+
+export { addCollection, getContentById, getAllCollections, deleteContentById };
