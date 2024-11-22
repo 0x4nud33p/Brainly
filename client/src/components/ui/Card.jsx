@@ -28,30 +28,36 @@ export default function Card({
             >
               <MoreVertical className="w-5 h-5 text-gray-400" />
             </button>
-            {showOptions && (
+            {showOptions && (onShare || onEdit || onDelete) && (
               <div className="absolute right-0 mt-2 w-48 bg-gray-800 border border-gray-700 rounded-lg shadow-xl z-10">
                 <div className="py-1">
-                  <button
-                    onClick={onShare}
-                    className="flex items-center w-full px-4 py-2 text-sm text-gray-300 hover:bg-gray-700/50"
-                  >
-                    <Share2 className="w-4 h-4 mr-3" />
-                    Share
-                  </button>
-                  <button
-                    onClick={onEdit}
-                    className="flex items-center w-full px-4 py-2 text-sm text-gray-300 hover:bg-gray-700/50"
-                  >
-                    <Edit2 className="w-4 h-4 mr-3" />
-                    Edit
-                  </button>
-                  <button
-                    onClick={onDelete}
-                    className="flex items-center w-full px-4 py-2 text-sm text-red-400 hover:bg-gray-700/50"
-                  >
-                    <Trash2 className="w-4 h-4 mr-3" />
-                    Delete
-                  </button>
+                  {onShare && (
+                    <button
+                      onClick={onShare}
+                      className="flex items-center w-full px-4 py-2 text-sm text-gray-300 hover:bg-gray-700/50"
+                    >
+                      <Share2 className="w-4 h-4 mr-3" />
+                      Share
+                    </button>
+                  )}
+                  {onEdit && (
+                    <button
+                      onClick={onEdit}
+                      className="flex items-center w-full px-4 py-2 text-sm text-gray-300 hover:bg-gray-700/50"
+                    >
+                      <Edit2 className="w-4 h-4 mr-3" />
+                      Edit
+                    </button>
+                  )}
+                  {onDelete && (
+                    <button
+                      onClick={onDelete}
+                      className="flex items-center w-full px-4 py-2 text-sm text-red-400 hover:bg-gray-700/50"
+                    >
+                      <Trash2 className="w-4 h-4 mr-3" />
+                      Delete
+                    </button>
+                  )}
                 </div>
               </div>
             )}

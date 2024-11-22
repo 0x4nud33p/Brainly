@@ -23,7 +23,7 @@ function Content() {
   useEffect(() => {
     const fetchCollections = async () => {
       try {
-        const toastloading = toast.loading("Retrieving Your Collections");
+        const toastloading = toast.loading("Loading...");
         const userId = localStorage.getItem("userid");
         const token = localStorage.getItem("token");
 
@@ -39,7 +39,6 @@ function Content() {
 
         setSampleCard(collections);
         toast.dismiss(toastloading);
-        toast.success("Collections retrieved successfully!");
       } catch (error) {
         console.error(error);
         toast.dismiss();

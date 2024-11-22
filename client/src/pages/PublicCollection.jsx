@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import Card from '../components/ui/Card';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 
 function PublicCollection() {
   const { id } = useParams();
@@ -22,7 +22,6 @@ function PublicCollection() {
         console.log(collection);
         setLoading(false);
         toast.dismiss(toastLoading);
-        toast.success('Content loaded successfully!');
       } catch (error) {
         console.error('Error fetching collection:', error);
         toast.dismiss();
@@ -58,9 +57,6 @@ function PublicCollection() {
               tags={collection.tags}
               link={collection.link}
               id={collection._id}
-              // onShare={() => console.log("share not available")}
-              onEdit={() => console.log('Edit:', card.title)}
-              onDelete={() => console.log('Delete:', card.title)}
             />
         </div>
       </div>
