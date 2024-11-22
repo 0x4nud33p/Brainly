@@ -47,6 +47,9 @@ const handleDelete = async (id) => {
 
     toast.error(errorMessage);
   }
+  finally{
+    window.location.reload();
+  }
 };
 
   
@@ -74,6 +77,9 @@ const handleDelete = async (id) => {
         console.error(error);
         toast.dismiss();
         toast.error("Error while retrieving your collections");
+      }
+      finally{
+        window.location.reload();
       }
     };
 
