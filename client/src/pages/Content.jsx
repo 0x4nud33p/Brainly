@@ -76,11 +76,11 @@ const handleDelete = async (id) => {
       } catch (error) {
         console.error(error);
         toast.dismiss();
-        toast.error("Error while retrieving your collections");
+        toast.success("No collections! Save some Colleciton 😊");
       }
-      finally{
-        window.location.reload();
-      }
+      // finally{
+      //   window.location.reload();
+      // }
     };
 
     fetchCollections();
