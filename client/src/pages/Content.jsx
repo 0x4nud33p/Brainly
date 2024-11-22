@@ -14,7 +14,7 @@ function Content() {
         { id: '2', name: '#sample-tags', color: 'bg-purple-500/20 text-purple-300' }
       ];
 
-   const handleShare = (id) => {
+  const handleShare = (id) => {
     const shareLink = `${import.meta.env.VITE_PRODUCTION_URL}/content/${id}`;
     navigator.clipboard.writeText(shareLink);
     toast.success('Link copied to clipboard');
