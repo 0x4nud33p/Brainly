@@ -20,6 +20,37 @@ function Content() {
     toast.success('Link copied to clipboard');
   };
 
+const handleDelete = async (id) => {
+  const token = localStorage.getItem("token");
+  try {
+    const loadingtoast = toast.loading("Deleting collection...");
+    
+    const response = await axios.post(
+      `${import.meta.env.VITE_PRODUCTION_URL}/api/v1/user/deletecollection`,
+      { contentid: id },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    toast.dismiss(loadingtoast);
+    toast.success(response.data.message || "Collection deleted successfully!");
+  } catch (error) {
+    toast.dismiss();
+    console.error("Error while deleting collection:", error);
+
+    const errorMessage =
+      error.response?.data?.message || 
+      "Something went wrong. Please try again."; 
+
+    toast.error(errorMessage);
+  }
+};
+
+  
+
   useEffect(() => {
     const fetchCollections = async () => {
       try {
@@ -80,7 +111,7 @@ function Content() {
               id={card._id}
               onShare={() => handleShare(card._id)}
               onEdit={() => console.log('Edit:', card.title)}
-              onDelete={() => console.log('Delete:', card.title)}
+              onDelete={() => handleDelete((card._id))}
             />
           ))}
         </div>
