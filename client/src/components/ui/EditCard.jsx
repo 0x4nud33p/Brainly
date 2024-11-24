@@ -24,10 +24,8 @@ function EditCard({ isOpen, onClose, editData }) {
     }
 
     const token = localStorage.getItem("token");
-    console.log(token);
 
     try {
-      const loadingToast = toast.loading("Updating collection...");
       await axios.put(
         `${import.meta.env.VITE_PRODUCTION_URL}/api/v1/user/updatecollection`,
         { id: editData._id, title, content, link },
@@ -37,7 +35,6 @@ function EditCard({ isOpen, onClose, editData }) {
           },
         }
       );
-      toast.dismiss(loadingToast);
       toast.success("Collection updated successfully!");
       onClose();
     } catch (error) {

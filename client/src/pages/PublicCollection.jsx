@@ -12,7 +12,6 @@ function PublicCollection() {
   useEffect(() => {
     const fetchCollection = async () => {
       try {
-        const toastLoading = toast.loading('Loading content...');
         const { data } = await axios.get(
           `${import.meta.env.VITE_PRODUCTION_URL}/api/v1/user/content/${id}`
         );
@@ -20,7 +19,6 @@ function PublicCollection() {
         console.log(data);
         console.log(collection);
         setLoading(false);
-        toast.dismiss(toastLoading);
       } catch (error) {
         console.error('Error fetching collection:', error);
         toast.dismiss();

@@ -25,7 +25,6 @@ function Content() {
   const handleDelete = async (id) => {
     const token = localStorage.getItem("token");
     try {
-      const loadingToast = toast.loading("Deleting collection...");
       const response = await axios.post(
         `${import.meta.env.VITE_PRODUCTION_URL}/api/v1/user/deletecollection`,
         { contentid: id },
@@ -35,7 +34,6 @@ function Content() {
           },
         }
       );
-      toast.dismiss(loadingToast);
       toast.success(response.data.message || "Collection deleted successfully!");
       setSampleCard((prev) => prev.filter((card) => card._id !== id));
     } catch (error) {
@@ -50,7 +48,6 @@ function Content() {
   useEffect(() => {
     const fetchCollections = async () => {
       try {
-        const toastLoading = toast.loading("Loading...");
         const userId = localStorage.getItem("userid");
         const token = localStorage.getItem("token");
 
@@ -65,7 +62,6 @@ function Content() {
         );
 
         setSampleCard(collections);
-        toast.dismiss(toastLoading);
       } catch (error) {
         toast.dismiss();
         toast.error("Failed to load collections. Please try again.");

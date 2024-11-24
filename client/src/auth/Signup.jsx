@@ -17,7 +17,6 @@ export default function Signup() {
     e.preventDefault();
     setIsLoading(true);
     try {
-      toast.loading("Signing Up...");
       await axios.post(`${import.meta.env.VITE_PRODUCTION_URL}/api/v1/user/signup`, formData);
       toast.success("Signed up successfully!");
       navigate("/login");
