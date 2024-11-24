@@ -35,7 +35,7 @@ export default function Login() {
   };
 
   return (
-    <div className="bg-gradient-to-b from-gray-900 to-gray-800 text-white mt-[80px] min-h-[670px]">
+    <div className="bg-gradient-to-b from-gray-900 to-gray-800 text-white mt-[60px] min-h-[670px]">
       <div className="mx-auto max-w-[350px] space-y-6 p-4">
         <div className="space-y-2 text-center">
           <h1 className="text-3xl text-white font-bold">Sign In</h1>
