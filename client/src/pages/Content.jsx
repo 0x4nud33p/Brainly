@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Card from '../components/ui/Card';
 import { Plus } from "lucide-react";
-import PopupCard from '../components/ui/PopUpCard.jsx';
+import PopupCard from '../components/ui/PopupCard.jsx';
 import EditCard from '../components/ui/EditCard.jsx';
 import axios from 'axios';
 import toast from 'react-hot-toast';
