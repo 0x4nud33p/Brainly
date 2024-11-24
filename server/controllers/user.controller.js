@@ -107,5 +107,44 @@ const deleteContentById = async (req, res) => {
   }
 };
 
+const updateCollection = async (req, res) => {
+  const { id, title, content, link } = req.body;
 
-export { addCollection, getContentById, getAllCollections, deleteContentById };
+  if (!id || !title || !content || !link) {
+    return res
+      .status(400) 
+      .json({ message: "id, title, content, and link are required" });
+  }
+
+  try {
+   
+    const collectionToBeUpdated = await Content.findById(id);
+    if (!collectionToBeUpdated) {
+      return res
+        .status(404)
+        .json({ message: "Collection with the given ID not found" });
+    }
+
+    
+    await Content.findByIdAndUpdate(
+      id,
+      { title, content, link }, 
+      { new: true, runValidators: true } 
+    );
+
+    return res.status(200).json({ message: "Collection updated successfully" });
+  } catch (error) {
+    console.error("Internal Server Error:", error);
+    return res.status(500).json({ message: "Error while updating collection" });
+  }
+};
+
+
+
+export {
+  addCollection,
+  getContentById,
+  getAllCollections,
+  deleteContentById,
+  updateCollection,
+};

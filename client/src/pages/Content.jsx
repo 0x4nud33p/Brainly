@@ -2,62 +2,55 @@ import React, { useEffect, useState } from 'react';
 import Card from '../components/ui/Card';
 import { Plus } from "lucide-react";
 import PopupCard from '../components/ui/PopUpCard.jsx';
+import EditCard from '../components/ui/EditCard.jsx';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
-
 function Content() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false);
   const [sampleCards, setSampleCard] = useState([]);
-  const sampleTags =  [
-        { id: '1', name: '#tags-comming-soon', color: 'bg-blue-500/20 text-blue-300' },
-        { id: '2', name: '#sample-tags', color: 'bg-purple-500/20 text-purple-300' }
-      ];
+  const [editData, setEditData] = useState(null);
+  const sampleTags = [
+    { id: '1', name: '#tags-comming-soon', color: 'bg-blue-500/20 text-blue-300' },
+    { id: '2', name: '#sample-tags', color: 'bg-purple-500/20 text-purple-300' }
+  ];
 
-const handleShare = (id) => {
+  const handleShare = (id) => {
     const shareLink = `${import.meta.env.VITE_SHARABLE_URL}/content/${id}`;
     navigator.clipboard.writeText(shareLink);
     toast.success('Link copied to clipboard');
   };
 
-const handleDelete = async (id) => {
-  const token = localStorage.getItem("token");
-  try {
-    const loadingtoast = toast.loading("Deleting collection...");
-    
-    const response = await axios.post(
-      `${import.meta.env.VITE_PRODUCTION_URL}/api/v1/user/deletecollection`,
-      { contentid: id },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
-    toast.dismiss(loadingtoast);
-    toast.success(response.data.message || "Collection deleted successfully!");
-  } catch (error) {
-    toast.dismiss();
-    console.error("Error while deleting collection:", error);
-
-    const errorMessage =
-      error.response?.data?.message || 
-      "Something went wrong. Please try again."; 
-
-    toast.error(errorMessage);
-  }
-  finally{
-    window.location.reload();
-  }
-};
-
-  
+  const handleDelete = async (id) => {
+    const token = localStorage.getItem("token");
+    try {
+      const loadingToast = toast.loading("Deleting collection...");
+      const response = await axios.post(
+        `${import.meta.env.VITE_PRODUCTION_URL}/api/v1/user/deletecollection`,
+        { contentid: id },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      toast.dismiss(loadingToast);
+      toast.success(response.data.message || "Collection deleted successfully!");
+      setSampleCard((prev) => prev.filter((card) => card._id !== id));
+    } catch (error) {
+      toast.dismiss();
+      const errorMessage =
+        error.response?.data?.message || 
+        "Something went wrong. Please try again."; 
+      toast.error(errorMessage);
+    }
+  };
 
   useEffect(() => {
     const fetchCollections = async () => {
       try {
-        const toastloading = toast.loading("Loading...");
+        const toastLoading = toast.loading("Loading...");
         const userId = localStorage.getItem("userid");
         const token = localStorage.getItem("token");
 
@@ -72,22 +65,22 @@ const handleDelete = async (id) => {
         );
 
         setSampleCard(collections);
-        toast.dismiss(toastloading);
+        toast.dismiss(toastLoading);
       } catch (error) {
-        console.error(error);
         toast.dismiss();
-        toast.success("No collections! Save some Colleciton 😊");
+        toast.error("Failed to load collections. Please try again.");
       }
-      // finally{
-      //   window.location.reload();
-      // }
     };
 
     fetchCollections();
   }, []);
 
-  const togglePopup = () => {
-    setIsOpen((prev) => !prev);
+  const togglePopup = () => setIsOpen((prev) => !prev);
+  const toggleEditPopup = () => setIsEditOpen((prev) => !prev);
+
+  const handleEdit = (card) => {
+    setEditData(card);
+    toggleEditPopup();
   };
 
   return (
@@ -106,6 +99,7 @@ const handleDelete = async (id) => {
           </button>
         </div>
         <PopupCard isOpen={isOpen} onClose={togglePopup} />
+        <EditCard isOpen={isEditOpen} onClose={toggleEditPopup} editData={editData} />
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {sampleCards?.map((card) => (
             <Card
@@ -116,8 +110,8 @@ const handleDelete = async (id) => {
               link={card.link}
               id={card._id}
               onShare={() => handleShare(card._id)}
-              onEdit={() => console.log('Edit:', card.title)}
-              onDelete={() => handleDelete((card._id))}
+              onEdit={() => handleEdit(card)}
+              onDelete={() => handleDelete(card._id)}
             />
           ))}
         </div>
