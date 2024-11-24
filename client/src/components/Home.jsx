@@ -21,6 +21,8 @@ function Home() {
     }
   ];
 
+  const token = localStorage.getItem("token");
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white">
       <section className="relative overflow-hidden py-20 px-4">
@@ -43,11 +45,15 @@ function Home() {
             Transform your digital experience with a powerful platform that brings your ideas, 
             links, and videos together in perfect harmony.
           </p>
-          <Link to={"/signup"}>
+          {token ? (
+           <Link to={"/content"}><button className="px-8 py-4 rounded-lg bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-semibold transform transition-all hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-gray-900">Explore</button></Link>
+      ) : (
+        <Link to={"/signup"}>
           <button className="px-8 py-4 rounded-lg bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-semibold transform transition-all hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-gray-900">
             Get Started for Free
           </button>
-          </Link>
+        </Link>
+      )}
         </div>
       </section>
 
