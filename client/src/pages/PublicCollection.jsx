@@ -16,7 +16,6 @@ function PublicCollection() {
         const { data } = await axios.get(
           `${import.meta.env.VITE_PRODUCTION_URL}/api/v1/user/content/${id}`
         );
-
         setCollection(data);
         console.log(data);
         console.log(collection);
