@@ -8,7 +8,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: "https://brainly-9n6kseg95-anudeep-avulas-projects.vercel.app",
+    origin: "*",
   })
 );
 dotenv.config();
