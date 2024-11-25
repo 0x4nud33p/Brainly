@@ -17,8 +17,10 @@ export default function Signup() {
     e.preventDefault();
     setIsLoading(true);
     try {
+      const loading = toast.loading("Signing In");
       await axios.post(`${import.meta.env.VITE_PRODUCTION_URL}/api/v1/user/signup`, formData);
       toast.success("Signed up successfully!");
+      toast.dismiss(loading);
       navigate("/login");
     } catch (error) {
       toast.error("Error while signing up");
