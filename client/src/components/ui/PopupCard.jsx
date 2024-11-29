@@ -19,7 +19,6 @@ function PopupCard({ isOpen, onClose }) {
     const userid = localStorage.getItem("userid");
 
     try {
-      const loading = toast.loading("Saving");
       await axios.post(
         `${import.meta.env.VITE_PRODUCTION_URL}/api/v1/user/addcollection`,
         { title, content, link, userId: userid },
@@ -29,7 +28,6 @@ function PopupCard({ isOpen, onClose }) {
           },
         }
       );
-      toast.dismiss(loading);
       toast.success("Collection added successfully!");
       setTitle("");
       setContent("");

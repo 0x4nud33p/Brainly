@@ -17,7 +17,6 @@ export default function Login() {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const loading = toast.loading("Logging In");
       const response = await axios.post(
         `${import.meta.env.VITE_PRODUCTION_URL}/api/v1/user/signin`, 
         formData
@@ -25,7 +24,6 @@ export default function Login() {
       toast.success("Logged in successfully!");
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("userid",response.data.userid);
-      toast.dismiss(loading);
       navigate("/content");
     } catch (error) {
       toast.error("Error while logging in");
