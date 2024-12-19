@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Plus } from "lucide-react";
-import toast from "react-hot-toast";
 import {
   deleteCollection,
   getCollections,
@@ -58,7 +57,7 @@ function Content() {
           <p>Loading...</p>
         ) : (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {collections.map((card) => (
+            {collections?.map((card) => (
               <Card
                 key={card._id}
                 title={card.title}

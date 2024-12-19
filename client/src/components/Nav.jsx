@@ -95,7 +95,7 @@ export function Nav() {
 export const Logo = () => {
   return (
     (<Link
-      href="#"
+      to={"/"}
       className="font-normal flex space-x-2 items-center text-sm text-black py-1 relative z-20">
       <div
         className="" />

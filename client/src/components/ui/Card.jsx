@@ -73,7 +73,7 @@ export default function Card({
           Visit Your Link
         </a>
         <div className="flex flex-wrap gap-2 mt-4">
-          {tags.map((tag) => (
+          {tags?.map((tag) => (
             <span
               key={tag.id}
               className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${tag.color}`}

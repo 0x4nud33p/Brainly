@@ -18,8 +18,12 @@ function PopupCard({ isOpen, onClose }) {
       return;
     }
     const token = localStorage.getItem("token");
-    const userid = localStorage.getItem("userid");
-    dispatch(addCollection({title,content,link,userid,token}));
+    const userId  = localStorage.getItem("userid");
+     if (!token || !userId) {
+      toast.error("Authentication failed. Please log in again.");
+      return;
+    }
+    dispatch(addCollection({title,content,link,userId ,token}));
     setTitle("");
     setContent("");
     setLink("");
