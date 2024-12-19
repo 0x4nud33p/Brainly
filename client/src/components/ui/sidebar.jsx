@@ -104,7 +104,7 @@ export const MobileSidebar = ({
               ease: "easeInOut",
             }}
             className={cn(
-              "fixed h-full w-full inset-0 bg-neutral-800 p-10 z-[100] flex flex-col justify-between",
+              "fixed h-full w-full inset-0 bg-gradient-to-b from-gray-900 to-gray-800 p-10 z-[100] flex flex-col justify-between",
               className
             )}>
             <div
@@ -129,7 +129,7 @@ export const SidebarLink = ({
   return (
     (<Link
       to={link.href}
-      className={cn("flex items-center justify-start gap-2  group/sidebar py-2", className)}
+      className={cn("flex items-center justify-start gap-2 group/sidebar py-2", className)}
       {...props}>
       {link.icon}
       <motion.span

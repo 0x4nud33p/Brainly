@@ -27,21 +27,21 @@ export function Nav() {
     },
     {
       label: "Instagram Links",
-      href: "#",
+      href: "instacollection",
       icon: (
         <GrInstagram className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),
     },
     {
       label: "Twitter Links",
-      href: "#",
+      href: "xcollection",
       icon: (
         <TfiTwitter className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),
     },
     {
       label: "Youtube Links",
-      href: "#",
+      href: "ytcollection",
       icon: (
         <SlSocialYoutube className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),
@@ -103,10 +103,12 @@ export const Logo = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         className="font-medium text-black dark:text-white whitespace-pre">
-        <div className="flex items-center space-x-2">
+        <Link to={"/"}>
+         <div className="flex items-center space-x-2">
         <FaLightbulb className="text-white h-8 w-8" />
         <h1 className="text-xl font-bold text-white">Brainly</h1>
-      </div>
+        </div>
+        </Link>
       </motion.span>
     </Link>)
   );
