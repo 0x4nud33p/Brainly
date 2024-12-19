@@ -69,7 +69,7 @@ function Home() {
           </p>
           {token ? (
            <Link to={"/content"}><button
-              className="px-4 sm:px-6 md:px-8 py-2 sm:py-3 md:py-4 rounded-lg bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-medium sm:font-semibold text-sm sm:text-base md:text-lg transform transition-all hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-gray-900"
+              className="px-4 sm:px-6 md:px-8 py-2 sm:py-3 md:py-2 rounded-lg bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-medium sm:font-semibold text-sm sm:text-base md:text-lg transform transition-all hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-gray-900"
             >
               Explore
             </button>

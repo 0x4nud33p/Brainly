@@ -6,11 +6,13 @@ import Content from './pages/Content.jsx'
 import Login from './auth/Login.jsx';
 import Signup from './auth/Signup.jsx'
 import PublicCollection from './pages/PublicCollection.jsx';
+import {SidebarProvider} from "./components/ui/sidebar.jsx";
 
 
 function App() {
 
   return (
+    <SidebarProvider>
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<Layout />}>
@@ -22,6 +24,7 @@ function App() {
         </Route>
       </Routes>
     </BrowserRouter>
+    </SidebarProvider>
   )
 }
 
