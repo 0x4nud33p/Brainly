@@ -43,7 +43,7 @@ const getAllCollections = async (req, res) => {
   try {
     const collections = await Content.find({
       userId: objectIdUserId,
-    });
+    }).populate("tags", "title");
 
     if (collections.length === 0) {
       return res
@@ -59,6 +59,7 @@ const getAllCollections = async (req, res) => {
       .json({ message: "Internal Server Error", error: error.message });
   }
 };
+
 
 const getContentById = async (req, res) => {
   const { id } = req.params;
