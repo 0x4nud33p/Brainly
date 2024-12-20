@@ -1,10 +1,9 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
-import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { signUp } from "../store/features/collection/CollectionSlice";
 
 export default function Signup() {
-  const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     username: "",
@@ -12,20 +11,18 @@ export default function Signup() {
   });
   const [formError, setFormError] = useState(null);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
-    try {
-      await axios.post(`${import.meta.env.VITE_PRODUCTION_URL}/api/v1/user/signup`, formData);
-      toast.success("Signed up successfully!");
+    setFormError(null);
+
+    const response = await dispatch(signUp(formData));
+
+    if (signUp.rejected.match(response)) {
+      setFormError(response.payload || "An error occurred. Please try again.");
+    } else {
       navigate("/login");
-    } catch (error) {
-      toast.error("Error while signing up");
-      setFormError(error.response?.data?.message || "An unexpected error occurred");
-      console.error(error);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -53,7 +50,9 @@ export default function Signup() {
                 placeholder="Enter Username"
                 required
                 value={formData.username}
-                onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, username: e.target.value })
+                }
                 className="w-full px-3 py-2 border text-black border-gray-300 rounded"
               />
             </div>
@@ -65,9 +64,12 @@ export default function Signup() {
                 <input
                   id="password"
                   type={showPassword ? "text" : "password"}
+                  placeholder="Enter Password"
                   required
                   value={formData.password}
-                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, password: e.target.value })
+                  }
                   className="w-full px-3 py-2 text-black border border-gray-300 rounded"
                 />
                 <button
@@ -79,13 +81,16 @@ export default function Signup() {
                 </button>
               </div>
             </div>
-            {formError && <p className="text-red-500 text-sm text-center mt-2">{formError}</p>}
+            {formError && (
+              <p className="text-red-500 text-sm text-center mt-2">
+                {formError}
+              </p>
+            )}
             <button
               className="px-8 py-3 rounded-lg ml-16 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-semibold transform transition-all hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-gray-900"
               type="submit"
-              disabled={isLoading}
             >
-              {isLoading ? "Signing Up..." : "Sign Up"}
+              Sign Up
             </button>
           </div>
         </form>

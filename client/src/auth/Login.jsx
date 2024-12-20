@@ -1,7 +1,8 @@
-import axios from "axios";
-import toast from 'react-hot-toast';
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { logIn } from "../store/features/collection/CollectionSlice";
+import toast from "react-hot-toast";
 
 export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
@@ -12,23 +13,24 @@ export default function Login() {
   });
   const [formError, setFormError] = useState(null);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+    setFormError(null);
+
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_PRODUCTION_URL}/api/v1/user/signin`, 
-        formData
-      );
-      toast.success("Logged in successfully!");
-      localStorage.setItem("token", response.data.token);
-      localStorage.setItem("userid",response.data.userid);
-      navigate("/content");
+      const response = await dispatch(logIn(formData));
+      if (logIn.fulfilled.match(response)) {
+        toast.success("Logged in successfully!");
+        navigate("/content");
+      } else if (logIn.rejected.match(response)) {
+        throw new Error(response.payload || "An error occurred. Please try again.");
+      }
     } catch (error) {
-      toast.error("Error while logging in");
-      setFormError(error.response?.data?.message || "An unexpected error occurred");
-      console.error(error);
+      setFormError(error.message);
+      toast.error(error.message);
     } finally {
       setIsLoading(false);
     }
@@ -50,18 +52,22 @@ export default function Login() {
           <div className="space-y-4">
             <div className="space-y-2">
               <label htmlFor="username" className="text-white block font-medium">
-                username
+                Username
               </label>
               <input
                 id="username"
                 type="text"
-                placeholder="username"
+                placeholder="Enter Username"
                 required
                 value={formData.username}
-                onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, username: e.target.value })
+                }
                 className="w-full px-3 py-2 text-black border border-gray-300 rounded"
               />
-              {formError && <p className="text-red-500 text-sm">{formError}</p>}
+              {formError && (
+                <p className="text-red-500 text-sm">{formError}</p>
+              )}
             </div>
             <div className="space-y-2">
               <label htmlFor="password" className="text-white block font-medium">
@@ -71,9 +77,12 @@ export default function Login() {
                 <input
                   id="password"
                   type={showPassword ? "text" : "password"}
+                  placeholder="Enter Password"
                   required
                   value={formData.password}
-                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, password: e.target.value })
+                  }
                   className="w-full px-3 py-2 text-black border border-gray-300 rounded"
                 />
                 <button
