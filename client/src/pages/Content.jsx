@@ -58,15 +58,16 @@ function Content() {
             {collections?.map((card) => (
               <Card
                 key={card?._id}
-                title={card.title}
-                content={card.content}
-                link={card.link}
-                tags={card.tags}
+                id={card?._id}
+                title={card?.title || 'No Title'}
+                content={card?.content || 'No Content'}
+                link={card?.link || '#'}
+                tags={card?.tags || []} 
                 onDelete={() => handleDelete(card._id)}
                 onEdit={() => handleEdit(card)}
               />
             ))}
-          </div>
+          </div>  
         )}
       </div>
     </div>

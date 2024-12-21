@@ -61,7 +61,9 @@ export default function Card({
             )}
           </div>
         </div>
-        <p className="text-gray-300 mb-4 line-clamp-3">{content}</p>
+        <p className="text-gray-300 mb-4 line-clamp-3">
+          {typeof content === 'string' ? content : 'Invalid Content'}
+        </p>
         <a
           href={link}
           target="_blank"
@@ -71,19 +73,19 @@ export default function Card({
           Visit Your Link
         </a>
         <div className="flex flex-wrap gap-2 mt-4">
-          {tags.length > 0 ? (
-          tags.map((tag) => (
-            <span
-              key={tag._id} 
-              className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-500"
-            >
-              <Tag className="w-3 h-3 mr-1" />
-              {tag.title}
-            </span>
-          ))
-        ) : (
-          <span className="text-sm text-gray-500">No tags available</span>
-        )}
+          {tags && tags.length > 0 ? (
+            tags.map((tag, index) => (
+              <span
+                key={index}
+                className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-500"
+              >
+                <Tag className="w-3 h-3 mr-1" />
+                {tag?.title || 'Untitled'}
+              </span>
+            ))
+          ) : (
+            <span className="text-sm text-gray-500">No tags available</span>
+          )}
         </div>
       </div>
     </div>
