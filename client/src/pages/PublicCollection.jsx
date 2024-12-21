@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import Card from '../components/ui/Card';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 
 function PublicCollection() {
   const { id } = useParams();
@@ -10,6 +10,7 @@ function PublicCollection() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    console.log(id);
     const fetchCollection = async () => {
       try {
         const { data } = await axios.get(
@@ -39,7 +40,7 @@ function PublicCollection() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b mt-16 from-gray-900 to-gray-800 text-white p-4 sm:p-6">
+    <div className="min-h-screen w-full bg-gradient-to-b mt-16 from-gray-900 to-gray-800 text-white p-4 sm:p-6">
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-8">
           <h1 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-0 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400">

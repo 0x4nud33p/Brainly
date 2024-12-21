@@ -15,6 +15,7 @@ import { GrInstagram } from "react-icons/gr";
 import { TfiTwitter } from "react-icons/tfi";
 import { SlSocialYoutube } from "react-icons/sl";
 import { FiLogOut } from "react-icons/fi";
+import { Toaster } from "sonner";
 
 export function Nav() {
   const links = [
@@ -130,6 +131,7 @@ const Dashboard = () => {
   return (
     <>
     <Outlet />
+    <Toaster />
     </>
   );
 };

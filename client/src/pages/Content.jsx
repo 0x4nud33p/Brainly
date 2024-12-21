@@ -8,6 +8,7 @@ import {
 import Card from "../components/ui/Card";
 import PopupCard from "../components/ui/PopupCard";
 import EditCard from "../components/ui/EditCard";
+import { toast } from 'sonner';
 
 function Content() {
   const [isOpen, setIsOpen] = useState(false);
@@ -36,6 +37,12 @@ function Content() {
     dispatch(deleteCollection({ id, token }));
   };
 
+  const handleShare = (id) => {
+    const shareLink = `${window.location.origin}/content/${id}`;
+    window.navigator.clipboard.writeText(shareLink);
+    toast.success("Link copied to clipboard");
+  }
+  
   return (
     <div className="w-full min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white p-4 sm:p-6">
       <div className="max-w-6xl mx-auto">
@@ -65,6 +72,7 @@ function Content() {
                 link={card?.link}
                 tags={card?.tags} 
                 onDelete={() => handleDelete(card._id)}
+                onShare={() => handleShare(card._id)}
                 onEdit={() => handleEdit(card)}
               />
             ))}

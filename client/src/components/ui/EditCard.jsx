@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import toast from "react-hot-toast";
+import { toast } from 'sonner';
 
 function EditCard({ isOpen, onClose, editData }) {
   const [title, setTitle] = useState("");

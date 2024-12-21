@@ -1,5 +1,5 @@
 import axios from "axios";
-import toast from "react-hot-toast";
+import { toast } from 'sonner';
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addCollection } from "../../store/features/collection/CollectionSlice";
