@@ -37,12 +37,10 @@ function Content() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white p-4 sm:p-6">
+    <div className="w-full min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white p-4 sm:p-6">
       <div className="max-w-6xl mx-auto">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-white">
-            Your Collection
-          </h1>
+          <h1 className="text-3xl font-bold text-white">Your Collection</h1>
           <button
             onClick={togglePopup}
             className="flex items-center gap-2 px-4 py-2 rounded bg-purple-600 text-white"
@@ -59,10 +57,11 @@ function Content() {
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {collections?.map((card) => (
               <Card
-                key={card._id}
+                key={card?._id}
                 title={card.title}
                 content={card.content}
                 link={card.link}
+                tags={card.tags}
                 onDelete={() => handleDelete(card._id)}
                 onEdit={() => handleEdit(card)}
               />
