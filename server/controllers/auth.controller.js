@@ -4,6 +4,7 @@ import User from "../models/user.model.js";
 
 const signUp = async (req, res) => {
   const { username, password } = req.body;
+  console.log(req.body);
 
   if (!username || !password) {
     return res
@@ -25,7 +26,7 @@ const signUp = async (req, res) => {
 
     return res
       .status(201)
-      .send({ message: "User signed up successfully", user: newUser });
+      .send({ message: "User signed up successfully" });
   } catch (error) {
     console.error("Error during sign up:", error);
     return res
@@ -36,6 +37,7 @@ const signUp = async (req, res) => {
 
 const signIn = async (req, res) => {
   const { username, password } = req.body;
+  console.log(req.body);
 
  
   if (!username || !password) {
@@ -70,7 +72,12 @@ const signIn = async (req, res) => {
    
     return res
       .status(200)
-      .send({ message: "User logged in successfully", token, userid : user._id });
+      .send({
+        message: "User logged in successfully",
+        token,
+        username: user.username,
+        userid: user._id,
+      });
   } catch (error) {
     console.error("Error during sign in:", error);
     return res

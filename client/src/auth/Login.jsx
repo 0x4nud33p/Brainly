@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { logIn } from "../store/features/collection/CollectionSlice";
 import toast from "react-hot-toast";
+import axios from "axios";
 
 export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
@@ -13,7 +12,6 @@ export default function Login() {
   });
   const [formError, setFormError] = useState(null);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,23 +19,26 @@ export default function Login() {
     setFormError(null);
 
     try {
-      const response = await dispatch(logIn(formData));
-      if (logIn.fulfilled.match(response)) {
-        toast.success("Logged in successfully!");
-        navigate("/content");
-      } else if (logIn.rejected.match(response)) {
-        throw new Error(response.payload || "An error occurred. Please try again.");
-      }
+      const response = await axios.post(
+        `${import.meta.env.VITE_PRODUCTION_URL}/api/v1/user/signin`,
+        formData
+      );
+
+      toast.success("Signed in successfully!");
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("username", response.data.username);
+      localStorage.setItem("userid", response.data.userid);
+      navigate("/");
     } catch (error) {
-      setFormError(error.message);
-      toast.error(error.message);
-    } finally {
-      setIsLoading(false);
+      console.error(error);
+      const errorMessage =
+        error.response?.data?.message || "An unexpected error occurred";
+      setFormError(errorMessage);
     }
   };
 
   return (
-    <div className="bg-gradient-to-b from-gray-900 to-gray-800 text-white mt-[60px] min-h-[670px]">
+    <div className="w-full bg-gradient-to-b from-gray-900 to-gray-800 text-white mt-[60px] min-h-[670px]">
       <div className="mx-auto max-w-[350px] space-y-6 p-4">
         <div className="space-y-2 text-center">
           <h1 className="text-3xl text-white font-bold">Sign In</h1>

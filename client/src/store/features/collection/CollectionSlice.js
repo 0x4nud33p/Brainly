@@ -6,59 +6,8 @@ const initialState = {
   collections: [],
   loading: false,
   error: null,
-  userDetails: {
-    username: "",
-    userId: "",
-  },
 };
 
-export const signUp = createAsyncThunk(
-  "users/signup",
-  async ({ username, password }, { rejectWithValue }) => {
-    try {
-      await axios.post(
-        `${import.meta.env.VITE_PRODUCTION_URL}/api/v1/user/signup`,
-        { username, password }
-      );
-      toast.success("Signed up successfully!");
-      navigate("/login");
-    } catch (error) {
-      toast.error(
-        error.response?.data?.message || "An unexpected error occurred"
-      );
-      console.error(error);
-      return rejectWithValue(
-        error.response?.data?.message || "Failed to sign up"
-      );
-    }
-  }
-);
-
-export const logIn = createAsyncThunk(
-  "users/signin",
-  async ({ username, password }, { rejectWithValue, dispatch }) => {
-    try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_PRODUCTION_URL}/api/v1/user/signin`,
-        { username, password }
-      );
-      toast.success("Logged in successfully!");
-      const { username: userName, userId } = response.data;
-
-      dispatch(updateUserDetails({ username: userName, userId }));
-
-      navigate("/content");
-    } catch (error) {
-      toast.error(
-        error.response?.data?.message || "An unexpected error occurred"
-      );
-      console.error(error);
-      return rejectWithValue(
-        error.response?.data?.message || "Failed to log in"
-      );
-    }
-  }
-);
 
   export const addCollection = createAsyncThunk(
     "collection/add",
@@ -126,11 +75,7 @@ export const logIn = createAsyncThunk(
 const collectionSlice = createSlice({
   name: "collection",
   initialState,
-  reducers: {
-    updateUserDetails: (state, action) => {
-      state.userDetails = action.payload;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(addCollection.pending, (state) => {
@@ -160,5 +105,5 @@ const collectionSlice = createSlice({
   },
 });
 
-export const { updateUserDetails } = collectionSlice.actions;
+
 export default collectionSlice.reducer;
