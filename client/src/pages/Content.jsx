@@ -55,14 +55,15 @@ function Content() {
           <p>Loading...</p>
         ) : (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {console.log(collections)}
             {collections?.map((card) => (
               <Card
                 key={card?._id}
                 id={card?._id}
-                title={card?.title || 'No Title'}
-                content={card?.content || 'No Content'}
-                link={card?.link || '#'}
-                tags={card?.tags || []} 
+                title={card?.title}
+                content={card?.content}
+                link={card?.link}
+                tags={card?.tags} 
                 onDelete={() => handleDelete(card._id)}
                 onEdit={() => handleEdit(card)}
               />
