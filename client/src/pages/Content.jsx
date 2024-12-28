@@ -8,7 +8,7 @@ import {
 import Card from "../components/ui/Card";
 import PopupCard from "../components/ui/PopupCard";
 import EditCard from "../components/ui/EditCard";
-import { toast } from 'sonner';
+import { toast } from "sonner";
 
 function Content() {
   const [isOpen, setIsOpen] = useState(false);
@@ -21,7 +21,9 @@ function Content() {
   useEffect(() => {
     const userId = localStorage.getItem("userid");
     const token = localStorage.getItem("token");
-    dispatch(getCollections({ userId, token }));
+    if (userId && token) {
+      dispatch(getCollections({ userId, token }));
+    }
   }, [dispatch]);
 
   const togglePopup = () => setIsOpen((prev) => !prev);
@@ -41,8 +43,8 @@ function Content() {
     const shareLink = `${window.location.origin}/content/${id}`;
     window.navigator.clipboard.writeText(shareLink);
     toast.success("Link copied to clipboard");
-  }
-  
+  };
+
   return (
     <div className="w-full min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white p-4 sm:p-6">
       <div className="max-w-6xl mx-auto">
@@ -62,21 +64,24 @@ function Content() {
           <p>Loading...</p>
         ) : (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {console.log(collections)}
-            {collections?.map((card) => (
-              <Card
-                key={card?._id}
-                id={card?._id}
-                title={card?.title}
-                content={card?.content}
-                link={card?.link}
-                tags={card?.tags} 
-                onDelete={() => handleDelete(card._id)}
-                onShare={() => handleShare(card._id)}
-                onEdit={() => handleEdit(card)}
-              />
-            ))}
-          </div>  
+            {collections?.length === 0 ? (
+              <p>No collection found</p>
+            ) : (
+              collections?.map((card) => (
+                <Card
+                  key={card?._id}
+                  id={card?._id}
+                  title={card?.title}
+                  content={card?.content}
+                  link={card?.link}
+                  tags={card?.tags}
+                  onDelete={() => handleDelete(card._id)}
+                  onShare={() => handleShare(card._id)}
+                  onEdit={() => handleEdit(card)}
+                />
+              ))
+            )}
+          </div>
         )}
       </div>
     </div>

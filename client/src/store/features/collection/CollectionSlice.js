@@ -11,11 +11,11 @@ const initialState = {
 
   export const addCollection = createAsyncThunk(
     "collection/add",
-    async ({ title, content, link, userId, token }, { rejectWithValue }) => {
+    async ({ title, content, link, userId, tags, token }, { rejectWithValue }) => {
       try {
         const response = await axios.post(
           `${import.meta.env.VITE_PRODUCTION_URL}/api/v1/user/addcollection`,
-          { title, content, link, userId },
+          { title, content, link, userId,tags },
           { headers: { Authorization: `Bearer ${token}` } }
         );
         toast.success("Collection added successfully!");

@@ -8,26 +8,43 @@ function PopupCard({ isOpen, onClose }) {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [link, setLink] = useState("");
+  const [tags, setTags] = useState("");
   const dispatch = useDispatch();
+
+  const handleTags = () => {
+    return tags.split(",").map(tag => tag.trim());
+  }
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
+
+    const tagArray = handleTags();
 
     if (!title || !content || !link) {
       toast.error("All fields are required");
       return;
     }
+
     const token = localStorage.getItem("token");
-    const userId  = localStorage.getItem("userid");
-     if (!token || !userId) {
+    const userId = localStorage.getItem("userid");
+
+    if (!token || !userId) {
       toast.error("Authentication failed. Please log in again.");
       return;
     }
-    dispatch(addCollection({title,content,link,userId ,token}));
-    setTitle("");
-    setContent("");
-    setLink("");
-    onClose();
+
+    try {
+      await dispatch(addCollection({ title, content, link, tags: tagArray, userId, token }));
+      setTitle("");
+      setContent("");
+      setLink("");
+      setTags(""); 
+
+      onClose();
+      toast.success("Collection added successfully!");
+    } catch (error) {
+      toast.error("Failed to add collection. Please try again.");
+    }
   };
 
   if (!isOpen) return null;
@@ -70,6 +87,22 @@ function PopupCard({ isOpen, onClose }) {
               value={content}
               onChange={(e) => setContent(e.target.value)}
             ></textarea>
+          </div>
+          <div>
+            <label
+              htmlFor="tags"
+              className="block text-sm font-medium text-gray-300 mb-1"
+            >
+              Tags
+            </label>
+            <input
+              id="tags"
+              type="text"
+              value={tags}
+              onChange={(e) => setTags(e.target.value)}
+              className="w-full px-3 py-2 rounded-md bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+              placeholder="Enter tags separated by comma"
+            />
           </div>
           <div>
             <label

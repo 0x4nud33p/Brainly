@@ -4,6 +4,7 @@ import { Types } from "mongoose";
 
 const addCollection = async (req, res) => {
   const { link, title, tags, userId, content } = req.body;
+  console.log(req.body);
 
   if (!link || !title || !userId || !content) {
     return res.status(400).json({
