@@ -65,7 +65,7 @@ function Content() {
         ) : (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {collections?.length === 0 ? (
-              <p>No collection found</p>
+              <p>It looks like you don’t have any collections yet. Click 'Add Collection' to create your first one.</p>
             ) : (
               collections?.map((card) => (
                 <Card
