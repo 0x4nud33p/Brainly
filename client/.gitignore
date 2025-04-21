@@ -10,6 +10,9 @@
 !.yarn/releases
 !.yarn/versions
 
+# prismaclient
+/prisma/app
+
 # testing
 /coverage
 
