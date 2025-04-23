@@ -1,0 +1,105 @@
+"use client";
+
+import { motion } from "framer-motion";
+import { ArrowRight, Bookmark } from "lucide-react";
+
+const fadeInUp = {
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.6 },
+};
+
+const stagger = {
+  animate: {
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+};
+
+const LandingPage = () => {
+  return (
+    <section className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-50 flex items-center px-6">
+      <div className="max-w-7xl mx-auto w-full grid md:grid-cols-2 gap-16 items-center py-20">
+        <motion.div initial="initial" animate="animate" variants={stagger}>
+          <motion.span
+            {...fadeInUp}
+            className="mb-4 inline-block bg-indigo-100 text-indigo-600 text-sm font-medium px-4 py-1.5 rounded-full"
+          >
+            Organize your digital life
+          </motion.span>
+
+          <motion.h1
+            {...fadeInUp}
+            className="text-4xl md:text-6xl font-bold mb-6 leading-tight text-pink-400"
+          >
+            Save links, <br />
+            <span className="bg-gradient-to-r from-indigo-600 to-blue-500 bg-clip-text text-transparent">
+              organize thoughts
+            </span>
+          </motion.h1>
+
+          <motion.p
+            {...fadeInUp}
+            className="text-lg text-gray-600 mb-8 max-w-xl"
+          >
+            Brainly helps you save, organize, and revisit all your important
+            links in one place. The smart way to bookmark.
+          </motion.p>
+
+          <motion.div {...fadeInUp} className="flex flex-col sm:flex-row gap-4">
+            <button className="bg-indigo-600 text-white px-8 py-4 rounded-xl font-medium flex items-center justify-center hover:bg-indigo-700 transition-transform transform hover:-translate-y-1 shadow-lg hover:shadow-indigo-200">
+              Get Started Free
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </button>
+            <button className="border-2 border-gray-200 text-gray-700 px-8 py-4 rounded-xl hover:bg-gray-50 transition-transform transform hover:-translate-y-1">
+              How It Works
+            </button>
+          </motion.div>
+
+          <motion.div {...fadeInUp} className="mt-12 grid grid-cols-3 gap-8">
+            {[
+              { value: "10k+", label: "Users" },
+              { value: "5M+", label: "Links Saved" },
+              { value: "4.8/5", label: "User Rating" },
+            ].map((item, i) => (
+              <div key={i} className="text-center">
+                <p className="text-2xl font-bold text-indigo-600">
+                  {item.value}
+                </p>
+                <p className="text-gray-500 text-sm mt-1">{item.label}</p>
+              </div>
+            ))}
+          </motion.div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8 }}
+          className="flex justify-center relative"
+        >
+          <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8 flex flex-col justify-between space-y-6 transform hover:scale-[1.02] transition-transform">
+            <div className="space-y-4">
+              <div className="bg-gradient-to-r from-indigo-50 to-blue-50 h-8 w-full rounded-lg animate-pulse"></div>
+              <div className="bg-indigo-50 h-6 w-3/4 rounded-lg"></div>
+              <div className="bg-indigo-50 h-6 w-5/6 rounded-lg"></div>
+            </div>
+            <div className="flex justify-between text-sm text-gray-500 pt-6 border-t border-gray-100">
+              {["Videos", "Articles", "Watch Later"].map((item, i) => (
+                <div
+                  key={i}
+                  className="flex items-center gap-2 hover:text-indigo-600 transition-colors"
+                >
+                  <Bookmark className="h-4 w-4" /> {item}
+                </div>
+              ))}
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+};
+
+export default LandingPage;
