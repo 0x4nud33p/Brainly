@@ -52,9 +52,6 @@ const LandingPage = () => {
               Get Started Free
               <ArrowRight className="ml-2 h-5 w-5" />
             </button>
-            <button className="border-2 border-gray-200 text-gray-700 px-8 py-4 rounded-xl hover:bg-gray-50 transition-transform transform hover:-translate-y-1">
-              How It Works
-            </button>
           </motion.div>
 
           <motion.div {...fadeInUp} className="mt-12 grid grid-cols-3 gap-8">
