@@ -104,9 +104,7 @@ export default function FolderSidebar() {
             Collections
           </h2>
           <button
-            onClick={() =>
-              window.dispatchEvent(new CustomEvent("openAddFolderModal"))
-            }
+            onClick={() => setOpenAddFolderModal(true)}
             className="p-1 rounded-md text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
           >
             <FolderPlus className="h-5 w-5" />

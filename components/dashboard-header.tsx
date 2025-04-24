@@ -78,15 +78,6 @@ export default function DashboardHeader() {
         </form>
 
         <div className="flex items-center space-x-1">
-          <button
-            onClick={() =>
-              window.dispatchEvent(new CustomEvent("openAddLinkModal"))
-            }
-            className="md:hidden flex items-center justify-center p-2 rounded-md bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 text-white"
-          >
-            <Plus className="h-5 w-5" />
-          </button>
-
           <div className="relative">
             <button
               className="flex items-center space-x-1 rounded-full bg-slate-100 p-1.5 dark:bg-slate-800"

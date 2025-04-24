@@ -16,13 +16,17 @@ const FeatureCard = ({ icon, title, description }: FeatureCardProps) => {
   return (
     <motion.div
       {...fadeInUp}
-      className="p-8 bg-white rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 group hover:border-indigo-100 border-2 border-white"
+      className="p-8 bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-white rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 border border-slate-200 dark:border-slate-700"
     >
-      <div className="mb-6 p-4 bg-indigo-100 rounded-2xl inline-flex group-hover:bg-indigo-200 transition-colors">
+      <div className="mb-6 p-4 bg-slate-200 dark:bg-slate-700 rounded-2xl inline-flex group-hover:bg-slate-300 dark:group-hover:bg-slate-600 transition-colors">
         {icon}
       </div>
-      <h3 className="text-xl font-semibold mb-3 text-gray-800">{title}</h3>
-      <p className="text-gray-600 text-md leading-relaxed">{description}</p>
+      <h3 className="text-xl font-semibold mb-3 text-slate-900 dark:text-white">
+        {title}
+      </h3>
+      <p className="text-slate-600 dark:text-slate-400 text-md leading-relaxed">
+        {description}
+      </p>
     </motion.div>
   );
 };

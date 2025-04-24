@@ -21,19 +21,19 @@ const stagger = {
 const Features = () => {
   const features = [
     {
-      icon: <Bookmark className="w-8 h-8 text-indigo-600" />,
+      icon: <Bookmark className="w-8 h-8 text-slate-900 dark:text-white" />,
       title: "Smart Bookmarks",
       description:
         "Automatic categorization with AI-powered link analysis and rich previews.",
     },
     {
-      icon: <TagIcon className="w-8 h-8 text-indigo-600" />,
+      icon: <TagIcon className="w-8 h-8 text-slate-900 dark:text-white" />,
       title: "Smart Tagging",
       description:
         "Auto-generate and manage tags for better link organization and filtering.",
     },
     {
-      icon: <Clock className="w-8 h-8 text-indigo-600" />,
+      icon: <Clock className="w-8 h-8 text-slate-900 dark:text-white" />,
       title: "Read Later",
       description:
         "Mark links to revisit anytime and organize them by urgency or category.",
@@ -41,15 +41,18 @@ const Features = () => {
   ];
 
   return (
-    <section className="bg-white py-24 px-6">
+    <section className="bg-white dark:bg-slate-950 py-24 px-6">
       <div className="max-w-7xl mx-auto text-center mb-20">
         <motion.h2
           {...fadeInUp}
-          className="text-4xl font-bold mb-4 text-gray-900"
+          className="text-4xl font-bold mb-4 text-slate-900 dark:text-white"
         >
           Supercharge Your Productivity
         </motion.h2>
-        <motion.p {...fadeInUp} className="text-gray-600 text-lg">
+        <motion.p
+          {...fadeInUp}
+          className="text-slate-600 dark:text-slate-300 text-lg"
+        >
           Designed for focus, built for modern workflows
         </motion.p>
       </div>
