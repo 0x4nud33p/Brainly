@@ -45,7 +45,7 @@ export default function DashboardHeader() {
 
   return (
     <header className="sticky top-0 z-30 w-full border-b border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-950/90 backdrop-blur supports-backdrop-blur:bg-white/60">
-      <div className="container flex h-16 items-center justify-between">
+      <div className="container ml-6 flex h-16 items-center justify-between">
         <div className="flex items-center">
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -78,16 +78,6 @@ export default function DashboardHeader() {
         </form>
 
         <div className="flex items-center space-x-1">
-          <button
-            onClick={() =>
-              window.dispatchEvent(new CustomEvent("openAddLinkModal"))
-            }
-            className="hidden md:flex items-center px-3 py-2 rounded-md bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 text-white transition-colors"
-          >
-            <Plus className="h-4 w-4 mr-1" />
-            <span>Add Link</span>
-          </button>
-
           <button
             onClick={() =>
               window.dispatchEvent(new CustomEvent("openAddLinkModal"))
