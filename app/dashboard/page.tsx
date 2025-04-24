@@ -25,7 +25,7 @@ export default async function DashboardPage({
     <div className="flex min-h-screen flex-col">
       {/* <SessionProvider> */}
         <DashboardHeader />
-        <div className="container flex-1 items-start gap-6 md:grid md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr] py-4">
+        <div className="container flex-1 items-start gap-6 md:grid md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
           <FolderSidebar />
           <main className="flex w-full flex-col overflow-hidden">
             <Suspense fallback={<DashboardSkeleton />}>

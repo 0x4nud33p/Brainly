@@ -6,6 +6,7 @@ import LinkCard from "./link-card";
 import LinkListItem from "./link-list-item";
 import EditLinkModal from "./edit-link-modal";
 import DeleteConfirmModal from "./delete-confirm-modal";
+import AddLinkModal from "./addlinkmodal";
 
 type LinkGridProps = {
   selectedFolder?: string;
@@ -20,17 +21,17 @@ export default function LinkGrid({
 }: LinkGridProps) {
   const [links, setLinks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [viewMode, setViewMode] = useState("grid"); // 'grid' or 'list'
+  const [viewMode, setViewMode] = useState("grid");
   const [editLinkId, setEditLinkId] = useState(null);
   const [deleteLinkId, setDeleteLinkId] = useState(null);
   const [currentFolder, setCurrentFolder] = useState(null);
   const [filterOpen, setFilterOpen] = useState(false);
+  const [openAddLinkModal,setOpenAddLinkModal] = useState(false);
   const [filters, setFilters] = useState({
     domain: "",
-    sortBy: "newest", // 'newest', 'oldest', 'alphabetical'
+    sortBy: "newest",
   });
 
-  // Fetch links whenever params change
   useEffect(() => {
     const fetchLinks = async () => {
       try {
@@ -47,7 +48,6 @@ export default function LinkGrid({
         if (response.ok) {
           const data = await response.json();
 
-          // Apply sorting
           const sortedData = sortLinks(data, filters.sortBy);
           setLinks(sortedData);
         }
@@ -75,7 +75,6 @@ export default function LinkGrid({
     }
   }, [selectedFolder, searchQuery, selectedTag, filters]);
 
-  // Sort links based on selected criteria
   const sortLinks = (linksToSort, sortBy) => {
     switch (sortBy) {
       case "oldest":
@@ -96,7 +95,6 @@ export default function LinkGrid({
     }
   };
 
-  // Get all unique domains from links
   const getDomains = () => {
     const domains = links
       .map((link) => {
@@ -111,7 +109,6 @@ export default function LinkGrid({
     return [...new Set(domains)];
   };
 
-  // Handle link deletion
   const handleDeleteLink = async (id) => {
     try {
       const response = await fetch(`/api/links/${id}`, {
@@ -119,7 +116,6 @@ export default function LinkGrid({
       });
 
       if (response.ok) {
-        // Remove the deleted link from state
         setLinks(links.filter((link) => link.id !== id));
         setDeleteLinkId(null);
       }
@@ -128,7 +124,6 @@ export default function LinkGrid({
     }
   };
 
-  // Handle link update
   const handleUpdateLink = async (id, data) => {
     try {
       const response = await fetch(`/api/links/${id}`, {
@@ -139,7 +134,6 @@ export default function LinkGrid({
 
       if (response.ok) {
         const updatedLink = await response.json();
-        // Update the link in state
         setLinks(links.map((link) => (link.id === id ? updatedLink : link)));
         setEditLinkId(null);
       }
@@ -148,7 +142,6 @@ export default function LinkGrid({
     }
   };
 
-  // Generate title based on current view
   const getTitle = () => {
     if (selectedTag) {
       return `Links tagged with "${selectedTag}"`;
@@ -161,7 +154,10 @@ export default function LinkGrid({
     }
   };
 
-  // Clear all filters
+  const onClose = () => {
+
+  }
+
   const clearFilters = () => {
     setFilters({
       domain: "",
@@ -171,8 +167,17 @@ export default function LinkGrid({
 
   return (
     <div className="w-full">
-      {/* Header with title and view options */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
+      {openAddLinkModal && (
+        <AddLinkModal
+          isOpen={true}
+          onClose={() => setOpenAddLinkModal(false)}
+          onSubmit={(newLink) => {
+            setLinks([newLink, ...links]);
+            setOpenAddLinkModal(false);
+          }}
+        />
+      )}
+      <div className="mt-2 ml-4 flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
         <div>
           <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
             {getTitle()}
@@ -233,7 +238,6 @@ export default function LinkGrid({
         </div>
 
         <div className="flex items-center gap-2">
-          {/* Filter button */}
           <button
             onClick={() => setFilterOpen(!filterOpen)}
             className="inline-flex items-center justify-center rounded-md px-3 py-2 text-sm font-medium bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800"
@@ -242,7 +246,6 @@ export default function LinkGrid({
             Filter
           </button>
 
-          {/* View mode toggle */}
           <div className="flex items-center border border-slate-200 dark:border-slate-800 rounded-md overflow-hidden">
             <button
               onClick={() => setViewMode("grid")}
@@ -268,7 +271,6 @@ export default function LinkGrid({
         </div>
       </div>
 
-      {/* Filter dropdown */}
       {filterOpen && (
         <div className="mb-6 p-4 border border-slate-200 dark:border-slate-800 rounded-lg bg-white dark:bg-slate-900">
           <h3 className="text-sm font-medium text-slate-900 dark:text-white mb-3">
@@ -276,7 +278,6 @@ export default function LinkGrid({
           </h3>
 
           <div className="grid sm:grid-cols-2 gap-4">
-            {/* Domain filter */}
             <div>
               <label
                 htmlFor="domain-filter"
@@ -301,7 +302,6 @@ export default function LinkGrid({
               </select>
             </div>
 
-            {/* Sort by filter */}
             <div>
               <label
                 htmlFor="sort-filter"
@@ -326,13 +326,11 @@ export default function LinkGrid({
         </div>
       )}
 
-      {/* Loading state */}
       {isLoading ? (
         <div className="flex items-center justify-center py-12">
           <Loader2 className="h-8 w-8 animate-spin text-indigo-500" />
         </div>
       ) : links.length === 0 ? (
-        // Empty state
         <div className="flex flex-col items-center justify-center py-12 text-center">
           <div className="rounded-full bg-slate-100 dark:bg-slate-800 p-3 mb-4">
             <Inbox className="h-6 w-6 text-slate-500 dark:text-slate-400" />
@@ -346,16 +344,13 @@ export default function LinkGrid({
               : "Get started by adding your first link."}
           </p>
           <button
-            onClick={() =>
-              window.dispatchEvent(new CustomEvent("openAddLinkModal"))
-            }
+            onClick={() => setOpenAddLinkModal(true)}
             className="mt-4 inline-flex items-center px-4 py-2 rounded-md bg-indigo-600 hover:bg-indigo-500 text-white transition-colors"
           >
             Add your first link
           </button>
         </div>
       ) : (
-        // Links display (grid or list)
         <>
           {viewMode === "grid" ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -383,7 +378,6 @@ export default function LinkGrid({
         </>
       )}
 
-      {/* Edit Modal */}
       {editLinkId && (
         <EditLinkModal
           linkId={editLinkId}
@@ -393,7 +387,6 @@ export default function LinkGrid({
         />
       )}
 
-      {/* Delete Confirmation Modal */}
       {deleteLinkId && (
         <DeleteConfirmModal
           isOpen={!!deleteLinkId}

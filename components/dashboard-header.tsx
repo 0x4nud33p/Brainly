@@ -30,7 +30,6 @@ export default function DashboardHeader() {
   const [searchQuery, setSearchQuery] = useState(
     searchParams.get("search") || ""
   );
-  const [isDarkMode, setIsDarkMode] = useState(false);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -44,48 +43,10 @@ export default function DashboardHeader() {
     }
   };
 
-  const toggleDarkMode = () => {
-    const newMode = !isDarkMode;
-    setIsDarkMode(newMode);
-
-    // Toggle class on document
-    if (newMode) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-
-    // Save preference to localStorage
-    localStorage.setItem("darkMode", newMode ? "true" : "false");
-  };
-
-  // Effect to initialize dark mode from localStorage
-  useState(() => {
-    // Check if we're in browser environment
-    if (typeof window !== "undefined") {
-      const savedMode = localStorage.getItem("darkMode") === "true";
-      setIsDarkMode(savedMode);
-
-      if (savedMode) {
-        document.documentElement.classList.add("dark");
-      }
-
-      // Also check for system preference if nothing saved
-      if (
-        localStorage.getItem("darkMode") === null &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches
-      ) {
-        setIsDarkMode(true);
-        document.documentElement.classList.add("dark");
-      }
-    }
-  });
-
   return (
     <header className="sticky top-0 z-30 w-full border-b border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-950/90 backdrop-blur supports-backdrop-blur:bg-white/60">
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center">
-          {/* Mobile menu button */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="mr-4 p-2 rounded-md text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white md:hidden"
@@ -93,7 +54,6 @@ export default function DashboardHeader() {
             {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
 
-          {/* Logo */}
           <Link href="/dashboard" className="flex items-center">
             <span className="text-xl font-bold text-indigo-600 dark:text-indigo-400">
               Brainly
@@ -101,7 +61,6 @@ export default function DashboardHeader() {
           </Link>
         </div>
 
-        {/* Search bar */}
         <form
           onSubmit={handleSearch}
           className="hidden md:flex items-center w-full max-w-md mx-4"
@@ -118,9 +77,7 @@ export default function DashboardHeader() {
           </div>
         </form>
 
-        {/* Right side actions */}
         <div className="flex items-center space-x-1">
-          {/* Add link button */}
           <button
             onClick={() =>
               window.dispatchEvent(new CustomEvent("openAddLinkModal"))
@@ -131,7 +88,6 @@ export default function DashboardHeader() {
             <span>Add Link</span>
           </button>
 
-          {/* Small add button on mobile */}
           <button
             onClick={() =>
               window.dispatchEvent(new CustomEvent("openAddLinkModal"))
@@ -141,19 +97,6 @@ export default function DashboardHeader() {
             <Plus className="h-5 w-5" />
           </button>
 
-          {/* Theme toggle */}
-          <button
-            onClick={toggleDarkMode}
-            className="p-2 rounded-md text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
-          >
-            {isDarkMode ? (
-              <Sun className="h-5 w-5" />
-            ) : (
-              <Moon className="h-5 w-5" />
-            )}
-          </button>
-
-          {/* User menu */}
           <div className="relative">
             <button
               className="flex items-center space-x-1 rounded-full bg-slate-100 p-1.5 dark:bg-slate-800"
@@ -170,7 +113,6 @@ export default function DashboardHeader() {
               )}
             </button>
 
-            {/* Dropdown menu */}
             {isMenuOpen && (
               <div className="absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-white dark:bg-slate-900 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                 <div className="py-1">
@@ -204,7 +146,6 @@ export default function DashboardHeader() {
         </div>
       </div>
 
-      {/* Mobile search - show when menu is open */}
       <div className={`md:hidden px-4 pb-4 ${isMenuOpen ? "block" : "hidden"}`}>
         <form onSubmit={handleSearch} className="flex items-center w-full">
           <div className="relative w-full">
