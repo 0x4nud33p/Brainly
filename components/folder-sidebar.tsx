@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { PlusCircle, FolderPlus, Inbox, TagIcon } from "lucide-react";
+import { add, set } from "date-fns";
+import AddFolderModal from "./addnewfoldermodal";
 
 export default function FolderSidebar() {
   const router = useRouter();
@@ -15,6 +17,7 @@ export default function FolderSidebar() {
   const [tags, setTags] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const [openAddFolderModal, setOpenAddFolderModal] = useState(false);
 
   useEffect(() => {
     // Fetch folders
@@ -87,6 +90,15 @@ export default function FolderSidebar() {
     `}
     >
       <div className="flex flex-col gap-2 p-4 h-full">
+        {openAddFolderModal && (
+          <AddFolderModal
+            isOpen={openAddFolderModal}
+            onClose={() => setOpenAddFolderModal(false)}
+            onSubmit={() => {
+              console.log("Folder added");
+            }}
+          />
+        )}
         <div className="flex items-center justify-between mb-2">
           <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
             Collections
@@ -159,9 +171,7 @@ export default function FolderSidebar() {
 
         {/* Add folder button */}
         <button
-          onClick={() =>
-            window.dispatchEvent(new CustomEvent("openAddFolderModal"))
-          }
+          onClick={() => setOpenAddFolderModal(true)}
           className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
         >
           <PlusCircle className="h-4 w-4" />
