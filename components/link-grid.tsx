@@ -4,9 +4,9 @@ import { useState, useEffect } from "react";
 import { Inbox, Loader2, Grid, List, Filter, X } from "lucide-react";
 import LinkCard from "./link-card";
 import LinkListItem from "./link-list-item";
-import EditLinkModal from "./edit-link-modal";
-import DeleteConfirmModal from "./delete-confirm-modal";
-import AddLinkModal from "./addlinkmodal";
+import EditLinkModal from "./modals/edit-link-modal";
+import DeleteConfirmModal from "./modals/delete-confirm-modal";
+import AddLinkModal from "./modals/addlinkmodal";
 
 type LinkGridProps = {
   selectedFolder?: string;

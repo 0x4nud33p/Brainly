@@ -4,8 +4,8 @@ import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/auth";
 import LinkGrid from "@/components/link-grid";
 import FolderSidebar from "@/components/folder-sidebar";
-import DashboardHeader from "@/components/dashboard-header";
-import DashboardSkeleton from "@/components/dashboard-skeleton";
+import DashboardHeader from "@/components/dashboard/dashboard-header";
+import DashboardSkeleton from "@/components/dashboard/dashboard-skeleton";
 import { SessionProvider } from "next-auth/react";
 
 export const dynamic = "force-dynamic";

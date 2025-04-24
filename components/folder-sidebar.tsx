@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { PlusCircle, FolderPlus, Inbox, TagIcon } from "lucide-react";
 import { add, set } from "date-fns";
-import AddFolderModal from "./addnewfoldermodal";
+import AddFolderModal from "./modals/addnewfoldermodal";
 
 export default function FolderSidebar() {
   const router = useRouter();
