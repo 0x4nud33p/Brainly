@@ -54,7 +54,7 @@ export default function FolderSidebar() {
   }, []);
 
   // Handle folder selection
-  const selectFolder = (folderId) => {
+  const selectFolder = (folderId : string) => {
     if (folderId) {
       router.push(`/dashboard?folder=${folderId}`);
     } else {
@@ -64,7 +64,7 @@ export default function FolderSidebar() {
   };
 
   // Handle tag selection
-  const selectTag = (tagName) => {
+  const selectTag = (tagName : string) => {
     router.push(`/dashboard?tag=${encodeURIComponent(tagName)}`);
     setIsMobileOpen(false);
   };

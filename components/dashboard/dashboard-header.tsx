@@ -17,13 +17,7 @@ import {
 } from "lucide-react";
 
 export default function DashboardHeader() {
-  // const { data: session } = useSession();
-  const session = {
-    user: {
-      name: "John Doe",
-      image: "https://via.placeholder.com/150",
-    },
-  }
+  const { data: session, status } = useSession();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -31,7 +25,7 @@ export default function DashboardHeader() {
     searchParams.get("search") || ""
   );
 
-  const handleSearch = (e) => {
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (searchQuery.trim()) {

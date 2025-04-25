@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { ArrowRight, Bookmark } from "lucide-react";
+import Link from "next/link";
 
 const fadeInUp = {
   initial: { opacity: 0, y: 20 },
@@ -48,10 +49,12 @@ const LandingPage = () => {
           </motion.p>
 
           <motion.div {...fadeInUp} className="flex flex-col sm:flex-row gap-4">
-            <button className="bg-indigo-600 text-white px-8 py-4 rounded-xl font-medium flex items-center justify-center hover:bg-indigo-700 transition-transform transform hover:-translate-y-1 shadow-lg hover:shadow-indigo-200">
-              Get Started Free
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </button>
+            <Link href="/dashboard" className="w-full"> 
+              <button className="bg-indigo-600 text-white px-8 py-4 rounded-xl font-medium flex items-center justify-center hover:bg-indigo-700 transition-transform transform hover:-translate-y-1 shadow-lg hover:shadow-indigo-200">
+                Get Started Free
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </button>
+            </Link>
           </motion.div>
 
           <motion.div {...fadeInUp} className="mt-12 grid grid-cols-3 gap-8">
