@@ -63,7 +63,7 @@ model VerificationToken {
 }
 
 model Folder {
-  id          String   @id @default(cuid())
+  id          String   @id @default(cuid()) 
   name        String
   description String?
   isPublic    Boolean  @default(false)

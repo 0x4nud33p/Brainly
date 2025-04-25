@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { X, Loader2, Plus, Link as LinkIcon } from "lucide-react";
+import { FolderPropsTypes, LinkPropsTypes } from "@/types/types";
 
-export default function AddLinkModal({ isOpen, onClose, onSubmit }) {
+export default function AddLinkModal({ isOpen, onClose, onSubmit } : { isOpen: boolean; onClose: () => void; onSubmit: (data: LinkPropsTypes) => void; }) {
   const [isLoading, setIsLoading] = useState(false);
   const [isFetchingMetadata, setIsFetchingMetadata] = useState(false);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<LinkPropsTypes>({
     title: "",
     url: "",
     description: "",
@@ -12,7 +13,7 @@ export default function AddLinkModal({ isOpen, onClose, onSubmit }) {
     tags: [],
   });
   const [tagInput, setTagInput] = useState("");
-  const [folders, setFolders] = useState([]);
+  const [folders, setFolders] = useState<FolderPropsTypes[]>([]);
   const [error, setError] = useState("");
   const [urlTouched, setUrlTouched] = useState(false);
 
@@ -112,7 +113,6 @@ export default function AddLinkModal({ isOpen, onClose, onSubmit }) {
     setError("");
 
     try {
-      // Validate URL format
       try {
         new URL(formData.url);
       } catch (e) {
@@ -122,8 +122,7 @@ export default function AddLinkModal({ isOpen, onClose, onSubmit }) {
       }
 
       await onSubmit(formData);
-
-      // Reset form after successful submission
+      
       setFormData({
         title: "",
         url: "",

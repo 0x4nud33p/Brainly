@@ -3,7 +3,7 @@ import { Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/providers/providers";
 
-const spaceGrotesk = Space_Grotesk({ subsets: ["latin"] });
+const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], display: "swap" });
 
 export const metadata: Metadata = {
   title: "Brainly",

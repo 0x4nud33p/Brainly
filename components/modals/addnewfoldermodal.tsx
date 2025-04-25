@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { X, Loader2, Folder, Check } from "lucide-react";
 
-export default function AddFolderModal({ isOpen, onClose, onSubmit }) {
+export default function AddFolderModal({ isOpen, onClose, onSubmit } : { isOpen: boolean, onClose: () => void, onSubmit: (data: { name: string, color: string }) => Promise<void> }) {
   const [isLoading, setIsLoading] = useState(false);
   const [folderName, setFolderName] = useState("");
   const [folderColor, setFolderColor] = useState("blue");
@@ -28,10 +28,9 @@ export default function AddFolderModal({ isOpen, onClose, onSubmit }) {
     }
   }, [isOpen]);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Validate folder name
     if (!folderName.trim()) {
       setError("Folder name is required");
       return;
