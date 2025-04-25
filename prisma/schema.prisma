@@ -67,6 +67,7 @@ model Folder {
   name        String
   description String?
   isPublic    Boolean  @default(false)
+  color       String   @default("#6366F1")
   shareUrl    String?  @unique
   userId      String
   createdAt   DateTime @default(now())

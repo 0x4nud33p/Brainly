@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Folder" ADD COLUMN     "color" TEXT NOT NULL DEFAULT '#6366F1';

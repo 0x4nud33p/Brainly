@@ -40,11 +40,23 @@ export default function AddFolderModal({ isOpen, onClose, onSubmit } : { isOpen:
     setError("");
 
     try {
-      await onSubmit({
-        name: folderName.trim(),
-        color: folderColor,
+      // await onSubmit({
+      //   name: folderName.trim(),
+      //   color: folderColor,
+      // });
+      const res = await fetch("/api/folders", {
+        body: JSON.stringify({
+          name: folderName.trim(),
+          color: folderColor,
+        }),
       });
-
+      if (!res.ok) {
+        throw new Error("Failed to create folder");
+      }
+      const data = await res.json();
+      if (!data) {
+        throw new Error("Failed to create folder");
+      }
       // Reset form and close modal on success
       setFolderName("");
       setFolderColor("blue");

@@ -2,10 +2,13 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { z } from 'zod';
-import { db } from '@/lib/db';
+import prisma from '@/lib/db';
 
 const folderSchema = z.object({
   name: z.string().min(1).max(100),
+  color: z.enum([
+    'red', 'blue', 'green', 'yellow', 'purple', 'pink', 'orange', 'gray', 'teal', 'indigo'
+  ]),
   description: z.string().optional(),
   isPublic: z.boolean().optional(),
 });
@@ -49,9 +52,11 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const validatedData = folderSchema.parse(body);
     
-    const folder = await db.folder.create({
+    const folder = await prisma.folder.create({
       data: {
-        ...validatedData,
+        name: validatedData.name,
+        color: validatedData.color,
+        description: validatedData.description || null,
         userId: session.user.id,
         shareUrl: validatedData.isPublic ? `${process.env.NEXTAUTH_URL}/shared/folder/${crypto.randomUUID()}` : null,
       }
