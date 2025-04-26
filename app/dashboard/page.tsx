@@ -6,7 +6,6 @@ import LinkGrid from "@/components/link-grid";
 import FolderSidebar from "@/components/folder-sidebar";
 import DashboardHeader from "@/components/dashboard/dashboard-header";
 import DashboardSkeleton from "@/components/dashboard/dashboard-skeleton";
-import { SessionProvider } from "next-auth/react";
 
 export const dynamic = "force-dynamic";
 
@@ -16,10 +15,10 @@ export default async function DashboardPage({
   searchParams: { folder?: string; search?: string; tag?: string };
 }) {
   const session = await getServerSession(authOptions);
-
-//   if (!session?.user) {
-//     redirect("/login");
-//   }
+  console.log("session", session);
+  // if (!session?.user) {
+  //   redirect("/auth/signin");
+  // }
 
   return (
     <div className="flex min-h-screen flex-col">
