@@ -13,6 +13,7 @@ import {
   Menu,
   X,
   User,
+  Share2,
   Settings,
 } from "lucide-react";
 
@@ -39,7 +40,7 @@ export default function DashboardHeader() {
 
   return (
     <header className="sticky top-0 z-30 w-full border-b border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-950/90 backdrop-blur supports-backdrop-blur:bg-white/60">
-      <div className="container ml-6 flex h-16 items-center justify-between">
+      <div className="flex h-16 items-center justify-between px-4 w-full">
         <div className="flex items-center">
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -47,7 +48,6 @@ export default function DashboardHeader() {
           >
             {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
-
           <Link href="/dashboard" className="flex items-center">
             <span className="text-xl font-bold text-indigo-600 dark:text-indigo-400">
               Brainly
@@ -55,23 +55,26 @@ export default function DashboardHeader() {
           </Link>
         </div>
 
-        <form
-          onSubmit={handleSearch}
-          className="hidden md:flex items-center w-full max-w-md mx-4"
-        >
-          <div className="relative w-full">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 h-4 w-4" />
-            <input
-              type="text"
-              placeholder="Search links..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-slate-200 dark:border-slate-700 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-slate-800 dark:text-white"
-            />
-          </div>
-        </form>
+        <div className="flex items-center space-x-4">
+          <form
+            onSubmit={handleSearch}
+            className="hidden md:flex items-center w-full max-w-md"
+          >
+            <div className="relative w-full">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 h-4 w-4" />
+              <input
+                type="text"
+                placeholder="Search links..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 border border-slate-200 dark:border-slate-700 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-slate-800 dark:text-white"
+              />
+            </div>
+            <button className="ml-2 p-2 rounded-md text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white">
+              <Share2 />
+            </button>
+          </form>
 
-        <div className="flex items-center space-x-1">
           <div className="relative">
             <button
               className="flex items-center space-x-1 rounded-full bg-slate-100 p-1.5 dark:bg-slate-800"
