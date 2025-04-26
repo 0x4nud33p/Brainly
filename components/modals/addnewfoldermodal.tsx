@@ -1,23 +1,12 @@
 import { useState, useEffect } from "react";
+import { colorOptions } from "@/lib/data/data";
 import { X, Loader2, Folder, Check } from "lucide-react";
 
-export default function AddFolderModal({ isOpen, onClose, onSubmit } : { isOpen: boolean, onClose: () => void, onSubmit: (data: { name: string, color: string }) => Promise<void> }) {
+export default function AddFolderModal({ isOpen, onClose } : { isOpen: boolean, onClose: () => void }) {
   const [isLoading, setIsLoading] = useState(false);
   const [folderName, setFolderName] = useState("");
   const [folderColor, setFolderColor] = useState("blue");
   const [error, setError] = useState("");
-
-  // Predefined colors for folder selection
-  const colorOptions = [
-    { name: "blue", value: "bg-blue-500" },
-    { name: "green", value: "bg-green-500" },
-    { name: "red", value: "bg-red-500" },
-    { name: "yellow", value: "bg-yellow-500" },
-    { name: "purple", value: "bg-purple-500" },
-    { name: "pink", value: "bg-pink-500" },
-    { name: "indigo", value: "bg-indigo-500" },
-    { name: "teal", value: "bg-teal-500" },
-  ];
 
   // Reset form when modal opens
   useEffect(() => {
@@ -28,6 +17,7 @@ export default function AddFolderModal({ isOpen, onClose, onSubmit } : { isOpen:
     }
   }, [isOpen]);
 
+  // Handle form submission
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -40,16 +30,24 @@ export default function AddFolderModal({ isOpen, onClose, onSubmit } : { isOpen:
     setError("");
 
     try {
-      // await onSubmit({
-      //   name: folderName.trim(),
-      //   color: folderColor,
-      // });
+      const response = await fetch("/api/folders", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: folderName.trim(),
+          color: folderColor,
+        }),
+      });
+      console.log("Response from adding folders", response);
       const res = await fetch("/api/folders", {
         body: JSON.stringify({
           name: folderName.trim(),
           color: folderColor,
         }),
       });
+      console.log("Response from fetching folders", res);
       if (!res.ok) {
         throw new Error("Failed to create folder");
       }
@@ -57,13 +55,16 @@ export default function AddFolderModal({ isOpen, onClose, onSubmit } : { isOpen:
       if (!data) {
         throw new Error("Failed to create folder");
       }
-      // Reset form and close modal on success
       setFolderName("");
       setFolderColor("blue");
       onClose();
     } catch (error) {
       console.error("Error adding folder:", error);
-      setError(error.message || "Failed to create folder.");
+      if (error instanceof Error) {
+        setError(error.message || "Failed to create folder.");
+      } else {
+        setError("Failed to create folder.");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -132,7 +133,6 @@ export default function AddFolderModal({ isOpen, onClose, onSubmit } : { isOpen:
               </div>
             )}
 
-            {/* Folder Name Field */}
             <div>
               <label
                 htmlFor="folder-name"
@@ -151,7 +151,6 @@ export default function AddFolderModal({ isOpen, onClose, onSubmit } : { isOpen:
               />
             </div>
 
-            {/* Folder Color Selection */}
             <div>
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                 Folder Color
@@ -173,7 +172,6 @@ export default function AddFolderModal({ isOpen, onClose, onSubmit } : { isOpen:
               </div>
             </div>
 
-            {/* Folder Preview */}
             <div className="mt-6 flex items-center">
               <div
                 className={`w-10 h-10 rounded-lg bg-${folderColor}-500 flex items-center justify-center`}
@@ -191,7 +189,6 @@ export default function AddFolderModal({ isOpen, onClose, onSubmit } : { isOpen:
             </div>
           </div>
 
-          {/* Actions */}
           <div className="px-6 py-4 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-200 dark:border-slate-800 flex justify-end space-x-3">
             <button
               type="button"

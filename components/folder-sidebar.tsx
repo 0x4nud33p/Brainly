@@ -20,7 +20,6 @@ export default function FolderSidebar() {
   const [openAddFolderModal, setOpenAddFolderModal] = useState(false);
 
   useEffect(() => {
-    // Fetch folders
     const fetchFolders = async () => {
       try {
         setIsLoading(true);
@@ -94,9 +93,6 @@ export default function FolderSidebar() {
           <AddFolderModal
             isOpen={openAddFolderModal}
             onClose={() => setOpenAddFolderModal(false)}
-            onSubmit={() => {
-              console.log("Folder added");
-            }}
           />
         )}
         <div className="flex items-center justify-between mb-2">

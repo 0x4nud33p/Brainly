@@ -23,7 +23,6 @@ export default async function DashboardPage({
 
   return (
     <div className="flex min-h-screen flex-col">
-      {/* <SessionProvider> */}
         <DashboardHeader />
         <div className="container flex-1 items-start gap-6 md:grid md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
           <FolderSidebar />
@@ -37,7 +36,6 @@ export default async function DashboardPage({
             </Suspense>
           </main>
         </div>
-      {/* </SessionProvider> */}
     </div>
   );
 }

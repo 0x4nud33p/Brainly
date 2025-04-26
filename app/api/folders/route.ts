@@ -8,7 +8,7 @@ const folderSchema = z.object({
   name: z.string().min(1).max(100),
   color: z.enum([
     'red', 'blue', 'green', 'yellow', 'purple', 'pink', 'orange', 'gray', 'teal', 'indigo'
-  ]),
+  ]).optional(),
   description: z.string().optional(),
   isPublic: z.boolean().optional(),
 });
@@ -56,7 +56,7 @@ export async function POST(req: NextRequest) {
       data: {
         name: validatedData.name,
         color: validatedData.color,
-        description: validatedData.description || null,
+        description: validatedData?.description || null,
         userId: session.user.id,
         shareUrl: validatedData.isPublic ? `${process.env.NEXTAUTH_URL}/shared/folder/${crypto.randomUUID()}` : null,
       }
