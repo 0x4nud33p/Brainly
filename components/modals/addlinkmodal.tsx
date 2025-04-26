@@ -1,10 +1,16 @@
 import { useState, useEffect } from "react";
 import { X, Loader2, Plus, Link as LinkIcon } from "lucide-react";
-import { FolderPropsTypes, LinkPropsTypes } from "@/types/types";
+import { colorOptions } from "@/lib/data/data";
+import { FolderPropsTypes, LinkPropsTypes, TagPropsTypes } from "@/types/types";
 
-export default function AddLinkModal({ isOpen, onClose, onSubmit } : { isOpen: boolean; onClose: () => void; onSubmit: (data: LinkPropsTypes) => void; }) {
+export default function AddLinkModal({
+  isOpen,
+  onClose,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+}) {
   const [isLoading, setIsLoading] = useState(false);
-  const [isFetchingMetadata, setIsFetchingMetadata] = useState(false);
   const [formData, setFormData] = useState<LinkPropsTypes>({
     title: "",
     url: "",
@@ -33,8 +39,6 @@ export default function AddLinkModal({ isOpen, onClose, onSubmit } : { isOpen: b
       };
 
       fetchFolders();
-
-      // Reset form when opening
       setFormData({
         title: "",
         url: "",
@@ -48,7 +52,11 @@ export default function AddLinkModal({ isOpen, onClose, onSubmit } : { isOpen: b
     }
   }, [isOpen]);
 
-  const handleChange = (e) => {
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
 
@@ -58,56 +66,30 @@ export default function AddLinkModal({ isOpen, onClose, onSubmit } : { isOpen: b
   };
 
   const handleAddTag = () => {
-    if (tagInput.trim() && !formData.tags.includes(tagInput.trim())) {
-      setFormData((prev) => ({
-        ...prev,
-        tags: [...prev.tags, tagInput.trim()],
-      }));
+    if (
+      tagInput.trim() &&
+      !formData.tags.some((tag) => tag.name === tagInput.trim())
+    ) {
+      //set random color from colorOptions
+      const randomColor =
+        colorOptions[Math.floor(Math.random() * colorOptions.length)].value;
+      const newTag: TagPropsTypes = {
+        name: tagInput.trim(),
+        color: randomColor,
+      };
+      setFormData((prev) => ({ ...prev, tags: [...prev.tags, newTag] }));
       setTagInput("");
     }
   };
 
-  const handleRemoveTag = (tagToRemove) => {
+  const handleRemoveTag = (tagToRemove: TagPropsTypes) => {
     setFormData((prev) => ({
       ...prev,
       tags: prev.tags.filter((tag) => tag !== tagToRemove),
     }));
   };
 
-  // Fetch metadata for the URL
-  const fetchMetadata = async () => {
-    if (!formData.url || !urlTouched) return;
-
-    try {
-      setIsFetchingMetadata(true);
-      const response = await fetch(
-        `/api/metadata?url=${encodeURIComponent(formData.url)}`
-      );
-
-      if (response.ok) {
-        const metadata = await response.json();
-
-        setFormData((prev) => ({
-          ...prev,
-          title: prev.title || metadata.title || "",
-          description: prev.description || metadata.description || "",
-        }));
-      }
-    } catch (error) {
-      console.error("Error fetching metadata:", error);
-    } finally {
-      setIsFetchingMetadata(false);
-    }
-  };
-
-  // Fetch metadata when URL field loses focus
-  const handleUrlBlur = () => {
-    if (formData.url && urlTouched) {
-      fetchMetadata();
-    }
-  };
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
     setError("");
@@ -120,9 +102,25 @@ export default function AddLinkModal({ isOpen, onClose, onSubmit } : { isOpen: b
           "Please enter a valid URL including http:// or https://"
         );
       }
+      if (!formData.title && !urlTouched) {
+        throw new Error("Please enter a URL or title.");
+      }
 
-      await onSubmit(formData);
-      
+      const res = await fetch("/api/links", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.message || "Failed to add link.");
+      }
+      const data = await res.json();
+      if (data.error) {
+        throw new Error(data.error);
+      }
       setFormData({
         title: "",
         url: "",
@@ -134,7 +132,11 @@ export default function AddLinkModal({ isOpen, onClose, onSubmit } : { isOpen: b
       onClose();
     } catch (error) {
       console.error("Error adding link:", error);
-      setError(error.message || "Failed to add link.");
+      if (error instanceof Error) {
+        setError(error.message || "Failed to add link.");
+      } else {
+        setError("Failed to add link.");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -199,8 +201,6 @@ export default function AddLinkModal({ isOpen, onClose, onSubmit } : { isOpen: b
                 {error}
               </div>
             )}
-
-            {/* URL Field */}
             <div>
               <label
                 htmlFor="url"
@@ -215,23 +215,13 @@ export default function AddLinkModal({ isOpen, onClose, onSubmit } : { isOpen: b
                   name="url"
                   value={formData.url}
                   onChange={handleChange}
-                  onBlur={handleUrlBlur}
                   required
                   className="w-full px-3 py-2 border border-slate-300 dark:border-slate-700 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-slate-800 dark:text-white"
                   placeholder="https://example.com"
                 />
-                {isFetchingMetadata && (
-                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                    <Loader2 className="h-4 w-4 animate-spin text-indigo-500" />
-                  </div>
-                )}
               </div>
-              <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-                We'll try to automatically fetch the title and description.
-              </p>
             </div>
 
-            {/* Title Field */}
             <div>
               <label
                 htmlFor="title"
@@ -250,7 +240,6 @@ export default function AddLinkModal({ isOpen, onClose, onSubmit } : { isOpen: b
               />
             </div>
 
-            {/* Description Field */}
             <div>
               <label
                 htmlFor="description"
@@ -263,13 +252,12 @@ export default function AddLinkModal({ isOpen, onClose, onSubmit } : { isOpen: b
                 name="description"
                 value={formData.description}
                 onChange={handleChange}
-                rows="3"
+                rows={3}
                 className="w-full px-3 py-2 border border-slate-300 dark:border-slate-700 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-slate-800 dark:text-white"
                 placeholder="Add a description"
               />
             </div>
 
-            {/* Folder Selection */}
             <div>
               <label
                 htmlFor="folder"
@@ -293,7 +281,6 @@ export default function AddLinkModal({ isOpen, onClose, onSubmit } : { isOpen: b
               </select>
             </div>
 
-            {/* Tags */}
             <div>
               <label
                 htmlFor="tags"
@@ -332,10 +319,10 @@ export default function AddLinkModal({ isOpen, onClose, onSubmit } : { isOpen: b
                 <div className="flex flex-wrap gap-2 mt-2">
                   {formData.tags.map((tag) => (
                     <span
-                      key={tag}
+                      key={tag.name}
                       className="inline-flex items-center bg-indigo-100 text-indigo-800 text-xs rounded-full px-2.5 py-0.5 dark:bg-indigo-900/30 dark:text-indigo-300"
                     >
-                      {tag}
+                      {tag.name}
                       <button
                         type="button"
                         onClick={() => handleRemoveTag(tag)}
@@ -350,7 +337,6 @@ export default function AddLinkModal({ isOpen, onClose, onSubmit } : { isOpen: b
             </div>
           </div>
 
-          {/* Actions */}
           <div className="px-6 py-4 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-200 dark:border-slate-800 flex justify-end space-x-3">
             <button
               type="button"

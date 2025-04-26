@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
-import { db } from '@/lib/db';
-import { getLinkMetadata } from '@/lib/metadata';
+import prisma from '@/lib/db';
 
 export async function GET(req: NextRequest) {
   try {
@@ -38,7 +37,7 @@ export async function GET(req: NextRequest) {
       ];
     }
     
-    const links = await db.link.findMany({
+    const links = await prisma.link.findMany({
       where: whereClause,
       include: { 
         tags: true,
@@ -67,9 +66,9 @@ export async function POST(req: NextRequest) {
     
     const { tags, ...linkData } = validatedData;
     
-    const metadata = await getLinkMetadata(linkData.url);
+    const metadata = await fetch(`https://api.linkpreview.net/?key=${process.env.LINK_PREVIEW_API_KEY}&q=${linkData.url}`) 
     
-    const link = await db.link.create({
+    const link = await prisma.link.create({
       data: {
         ...linkData,
         userId: session.user.id,

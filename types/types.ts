@@ -7,10 +7,9 @@ export interface LinkPropsTypes {
 }
 
 export interface TagPropsTypes {
-    id: string;
+    id?: string;
     name: string;
     color: string;
-    links: LinkPropsTypes[];
 }
 
 export interface FolderPropsTypes {
@@ -21,3 +20,8 @@ export interface FolderPropsTypes {
     links: LinkPropsTypes[];
 }
 
+export type LinkGridProps = {
+  selectedFolder?: string;
+  searchQuery?: string;
+  selectedTag?: string;
+};

@@ -7,12 +7,7 @@ import LinkListItem from "./link-list-item";
 import EditLinkModal from "./modals/edit-link-modal";
 import DeleteConfirmModal from "./modals/delete-confirm-modal";
 import AddLinkModal from "./modals/addlinkmodal";
-
-type LinkGridProps = {
-  selectedFolder?: string;
-  searchQuery?: string;
-  selectedTag?: string;
-};
+import { LinkGridProps } from "@/types/types";
 
 export default function LinkGrid({
   selectedFolder,
@@ -32,6 +27,7 @@ export default function LinkGrid({
     sortBy: "newest",
   });
 
+  // This effect fetches links based on the selected folder, search query, and selected tag.
   useEffect(() => {
     const fetchLinks = async () => {
       try {
@@ -171,10 +167,6 @@ export default function LinkGrid({
         <AddLinkModal
           isOpen={true}
           onClose={() => setOpenAddLinkModal(false)}
-          onSubmit={(newLink) => {
-            setLinks([newLink, ...links]);
-            setOpenAddLinkModal(false);
-          }}
         />
       )}
       <div className="mt-2 ml-4 flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
