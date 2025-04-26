@@ -1,15 +1,29 @@
-
 "use client";
 
 import Google from "@/svgs/Google";
-import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { useState } from "react";
+import { authClient } from "@/lib/auth-client";
 
 export default function SignIn() {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
   const handleGoogleSignIn = async () => {
-    await signIn("google", { callbackUrl: "/" });
+    setLoading(true);
+    try {
+      await authClient.signIn.social({
+        provider: "google",
+        callbackURL: "/dashboard",
+      });
+      toast.success("Signed in with Google successfully!");
+    } catch (error) {
+      console.error("Google sign in failed:", error);
+      toast.error("Google sign in failed. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -22,10 +36,13 @@ export default function SignIn() {
 
         <button
           onClick={handleGoogleSignIn}
-          className="w-full flex items-center justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white hover:bg-gray-50 text-gray-800"
+          disabled={loading}
+          className={`w-full flex items-center justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white hover:bg-gray-50 text-gray-800 ${
+            loading ? "opacity-50 cursor-not-allowed" : ""
+          }`}
         >
           <Google />
-          Sign in with Google
+          {loading ? "Signing in..." : "Sign in with Google"}
         </button>
       </div>
     </div>

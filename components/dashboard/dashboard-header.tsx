@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { signOut, useSession } from "next-auth/react";
+import { authClient } from "@/lib/auth-client";
 import {
   Search,
   Plus,
@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 
 export default function DashboardHeader() {
-  const { data: session, status } = useSession();
+  const session = authClient.useSession();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isMenuOpen, setIsMenuOpen] = useState(false);

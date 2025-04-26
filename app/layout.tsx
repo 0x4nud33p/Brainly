@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Space_Grotesk } from "next/font/google";
 import "./globals.css";
-import { AuthProvider } from "@/providers/providers";
+// import { AuthProvider } from "@/providers/providers";
 
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], display: "swap" });
 
@@ -18,9 +18,9 @@ export default function RootLayout({
   return (
     <html lang="en" className="light">
       <body className={`${spaceGrotesk.className} light bg-white`}>
-        <AuthProvider>
+        {/* <AuthProvider> */}
         {children}
-        </AuthProvider>
+        {/* </AuthProvider> */}
       </body>
     </html>
   );

@@ -13,10 +13,10 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
-generator db {
-  provider = "prisma-db-seed"
-  output   = "./prisma/seed.ts"
-}
+// generator db {
+//   provider = "prisma-db-seed"
+//   output   = "./prisma/seed.ts"
+// }
 
 model User {
   id            String    @id @default(cuid())

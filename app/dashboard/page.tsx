@@ -1,11 +1,12 @@
+"use client";
+
 import { Suspense } from "react";
-import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
-import { authOptions } from "@/lib/auth";
 import LinkGrid from "@/components/link-grid";
 import FolderSidebar from "@/components/folder-sidebar";
 import DashboardHeader from "@/components/dashboard/dashboard-header";
 import DashboardSkeleton from "@/components/dashboard/dashboard-skeleton";
+import { authClient } from "@/lib/auth-client";
 
 export const dynamic = "force-dynamic";
 
@@ -14,11 +15,10 @@ export default async function DashboardPage({
 }: {
   searchParams: { folder?: string; search?: string; tag?: string };
 }) {
-  const session = await getServerSession(authOptions);
-  console.log("session", session);
-  // if (!session?.user) {
-  //   redirect("/auth/signin");
-  // }
+  const session = authClient.useSession();
+  if (!session.data?.session) {
+    redirect("/auth/signin");
+  }
 
   return (
     <div className="flex min-h-screen flex-col">
