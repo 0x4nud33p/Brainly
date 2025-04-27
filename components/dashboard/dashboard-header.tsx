@@ -3,7 +3,6 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { authClient } from "@/lib/auth-client";
 import {
   Search,
   Plus,
@@ -16,15 +15,16 @@ import {
   Share2,
   Settings,
 } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function DashboardHeader() {
-  const session = authClient.useSession();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState(
     searchParams.get("search") || ""
   );
+  const { user, isLoading, signOut } = useAuth();
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -80,25 +80,25 @@ export default function DashboardHeader() {
               className="flex items-center space-x-1 rounded-full bg-slate-100 p-1.5 dark:bg-slate-800"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
-              {session?.user?.image ? (
+              {/* {user?.image ? (
                 <img
                   src={session.user.image}
                   alt={session.user.name || "User"}
                   className="h-6 w-6 rounded-full"
                 />
-              ) : (
+              ) : ( */}
                 <User className="h-5 w-5 text-slate-600 dark:text-slate-300" />
-              )}
+              {/* )} */}
             </button>
 
             {isMenuOpen && (
               <div className="absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-white dark:bg-slate-900 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                 <div className="py-1">
-                  {session?.user?.name && (
+                  {user?.name && (
                     <div className="px-4 py-2 text-sm text-slate-700 dark:text-slate-300 border-b border-slate-200 dark:border-slate-800">
                       Signed in as
                       <br />
-                      <span className="font-medium">{session.user.name}</span>
+                      <span className="font-medium">{user?.name}</span>
                     </div>
                   )}
 
@@ -111,7 +111,7 @@ export default function DashboardHeader() {
                   </Link>
 
                   <button
-                    onClick={() => signOut({ callbackUrl: "/" })}
+                    onClick={() => signOut()}
                     className="w-full flex items-center px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
                   >
                     <LogOut className="h-4 w-4 mr-2" />

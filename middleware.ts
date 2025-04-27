@@ -2,14 +2,7 @@ import { betterFetch } from "@better-fetch/fetch";
 import type { Session } from "better-auth/types";
 import { NextResponse, type NextRequest } from "next/server";
 
-export default async function authMiddleware(request: NextRequest) {
-  const pathname = request.nextUrl.pathname;
-
-  // Allow unauthenticated access to auth routes
-  if (pathname.startsWith("/auth")) {
-    return NextResponse.next();
-  }
-
+export async function middleware(request: NextRequest) {
   const { data: session } = await betterFetch<Session>("/api/auth/get-session", {
     baseURL: request.nextUrl.origin,
     headers: {
@@ -18,12 +11,12 @@ export default async function authMiddleware(request: NextRequest) {
   });
 
   if (!session) {
-    return NextResponse.redirect(new URL("/auth/signin", request.url));
+    return NextResponse.redirect(new URL("/signin", request.url));
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/((?!api|_next|static|favicon.ico).*)"], // better matching
+  matcher: ["/dashboard/:path*"],
 };

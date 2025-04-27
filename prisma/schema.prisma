@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
   output   = "app/generated/prisma/client"
@@ -15,44 +9,63 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  password      String?
+  id            String    @id
+  name          String
+  email         String    @unique
+  emailVerified Boolean   @default(false)
+  image         String?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
-  folders       Folder[]
-  links         Link[]
-  accounts      Account[]
   sessions      Session[]
+  accounts      Account[]
+  folders       Folder[]
+  link          Link? 
+
+  @@map("user")
 }
-model Account {
-  id                String  @id @default(cuid())
-  userId            String
-  type              String  
-  provider          String  
-  providerAccountId String  
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String? @db.Text
-  session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([provider, providerAccountId])
-}
-
-
 
 model Session {
-  id           String   @id @default(cuid())
-  sessionToken String   @unique
-  userId       String
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id        String   @id
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@map("account")
+}
+
+model Verification {
+  id         String    @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  @@map("verification")
 }
 
 model Folder {
@@ -67,6 +80,8 @@ model Folder {
   updatedAt   DateTime @updatedAt
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   links       Link[]
+
+  @@map("folder")
 }
 
 model Link {
@@ -79,7 +94,7 @@ model Link {
   notes        String?  @db.Text
   source       String? 
   folderId     String?
-  userId       String
+  userId       String @unique
   tags         Tag[]
   isPublic     Boolean  @default(false)
   shareUrl     String?  @unique
@@ -88,6 +103,8 @@ model Link {
   updatedAt    DateTime @updatedAt
   folder       Folder?  @relation(fields: [folderId], references: [id], onDelete: SetNull)
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("link")
 }
 
 model Tag {
@@ -95,15 +112,6 @@ model Tag {
   name    String
   color   String @default("#6366F1")  
   links   Link[]
-}
 
-model Verification {
-  id         String    @id
-  identifier String
-  token      String  
-  expiresAt  DateTime
-  createdAt  DateTime?
-  updatedAt  DateTime?
-
-  @@map("verification")
+  @@map("tag")
 }
