@@ -29,6 +29,7 @@ export default function AddLinkModal({
       const fetchFolders = async () => {
         try {
           const response = await fetch("/api/folders");
+          console.log("response while fetching folders",response)
           if (response.ok) {
             const data = await response.json();
             setFolders(data);

@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
+import { authClient } from '@/lib/auth-client';
 import { z } from 'zod';
 import prisma from '@/lib/db';
 
@@ -16,15 +15,15 @@ const folderSchema = z.object({
 
 export async function GET(req: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
+    const session = authClient.useSession();
     
-    if (!session?.user) {
+    if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
     
-    const folders = await db.folder.findMany({
+    const folders = await prisma.folder.findMany({
       where: {
-        userId: session.user.id
+        userId: session.data?.user.id
       },
       include: {
         _count: {
@@ -33,6 +32,10 @@ export async function GET(req: NextRequest) {
       },
       orderBy: { createdAt: 'desc' },
     });
+    console.log(folders,"folders");
+    if(folders?.length === 0){
+      return NextResponse.json({ message: 'No folders found Create Some folders' }, { status: 404 });
+    }
     
     return NextResponse.json(folders);
   } catch (error) {
@@ -43,9 +46,9 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
+    const session = authClient.useSession();
     
-    if (!session?.user) {
+    if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
     
@@ -57,7 +60,7 @@ export async function POST(req: NextRequest) {
         name: validatedData.name,
         color: validatedData.color,
         description: validatedData?.description || null,
-        userId: session.user.id,
+        userId: session.data?.user.id,
         shareUrl: validatedData.isPublic ? `${process.env.NEXTAUTH_URL}/shared/folder/${crypto.randomUUID()}` : null,
       }
     });
