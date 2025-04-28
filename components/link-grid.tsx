@@ -8,6 +8,7 @@ import EditLinkModal from "./modals/edit-link-modal";
 import DeleteConfirmModal from "./modals/delete-confirm-modal";
 import AddLinkModal from "./modals/addlinkmodal";
 import { LinkGridProps } from "@/types/types";
+import { link } from "fs";
 
 export default function LinkGrid({
   selectedFolder,
@@ -43,8 +44,10 @@ export default function LinkGrid({
         const response = await fetch(url);
         if (response.ok) {
           const data = await response.json();
-
-          const sortedData = sortLinks(data, filters.sortBy);
+          console.log("data while fetching links",data);
+          const sortedData = data.map((link:any) => {
+            sortLinks([link], filters.sortBy)[0];
+          })
           setLinks(sortedData);
         }
       } catch (error) {

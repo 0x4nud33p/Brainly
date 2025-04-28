@@ -1,5 +1,5 @@
-import CardSkeleton from "@/skeleton/CardSkeleton";
-import HeaderSkeleton from "@/skeleton/HeaderSkeleton";
+import CardSkeleton from "@/components/skeleton/CardSkeleton";
+import HeaderSkeleton from "@/components/skeleton/HeaderSkeleton";
 import { ReactNode } from "react";
 
 interface DashboardSkeletonProps {
