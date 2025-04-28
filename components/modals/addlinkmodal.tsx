@@ -1,7 +1,10 @@
+"use client";
+
 import { useState, useEffect } from "react";
 import { X, Loader2, Plus, Link as LinkIcon } from "lucide-react";
 import { colorOptions } from "@/lib/data/data";
 import { FolderPropsTypes, LinkPropsTypes, TagPropsTypes } from "@/types/types";
+import { getFolders } from "@/utils/getFolders";
 
 export default function AddLinkModal({
   isOpen,
@@ -27,16 +30,8 @@ export default function AddLinkModal({
   useEffect(() => {
     if (isOpen) {
       const fetchFolders = async () => {
-        try {
-          const response = await fetch("/api/folders");
-          console.log("response while fetching folders",response)
-          if (response.ok) {
-            const data = await response.json();
-            setFolders(data);
-          }
-        } catch (error) {
-          console.error("Error fetching folders:", error);
-        }
+        const folders = await getFolders();
+        setFolders(folders);
       };
 
       fetchFolders();

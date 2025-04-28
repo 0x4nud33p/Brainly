@@ -5,6 +5,8 @@ import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { PlusCircle, FolderPlus, Inbox, TagIcon } from "lucide-react";
 import { add, set } from "date-fns";
 import AddFolderModal from "./modals/addnewfoldermodal";
+import {getFolders} from "@/utils/getFolders";
+import { getTags } from "@/utils/getTags";
 
 export default function FolderSidebar() {
   const router = useRouter();
@@ -21,34 +23,17 @@ export default function FolderSidebar() {
 
   useEffect(() => {
     const fetchFolders = async () => {
-      try {
-        setIsLoading(true);
-        const response = await fetch("/api/folders");
-        if (response.ok) {
-          const data = await response.json();
-          setFolders(data);
-        }
-      } catch (error) {
-        console.error("Error fetching folders:", error);
-      } finally {
-        setIsLoading(false);
-      }
+      const folders = await getFolders();
+      setFolders(folders);
     };
-
-    // Fetch tags
-    const fetchTags = async () => {
-      try {
-        const response = await fetch("/api/tags");
-        if (response.ok) {
-          const data = await response.json();
-          setTags(data);
-        }
-      } catch (error) {
-        console.error("Error fetching tags:", error);
-      }
-    };
-
     fetchFolders();
+
+    const fetchTags = async () => {
+      const tagsData = await getTags();
+      setTags(tagsData);
+      setIsLoading(false);
+    };
+
     fetchTags();
   }, []);
 
@@ -173,7 +158,7 @@ export default function FolderSidebar() {
         </button>
 
         {/* Tags section */}
-        {tags.length > 0 && (
+        {tags?.length > 0 && (
           <div className="mt-6">
             <h3 className="mb-2 px-2 text-sm font-semibold text-slate-900 dark:text-white">
               Tags

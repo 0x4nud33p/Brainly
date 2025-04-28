@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
+import getUserSession from '@/utils/getUserData';
 import prisma from '@/lib/db';
+import { linkSchema } from './types';
 
 export async function GET(req: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
+    const session = await getUserSession();
     
-    if (!session?.user) {
+    if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
     
@@ -55,7 +55,7 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
+    const session = await getUserSession();
     
     if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -63,39 +63,31 @@ export async function POST(req: NextRequest) {
     
     const body = await req.json();
     const validatedData = linkSchema.parse(body);
-    
-    const { tags, ...linkData } = validatedData;
-    
-    const metadata = await fetch(`https://api.linkpreview.net/?key=${process.env.LINK_PREVIEW_API_KEY}&q=${linkData.url}`) 
-    
-    const link = await prisma.link.create({
+
+    const linkData = await prisma.link.create({
       data: {
-        ...linkData,
-        userId: session.user.id,
-        title: linkData.title || metadata.title,
-        description: linkData.description || metadata.description,
-        thumbnail: metadata.image,
-        favicon: metadata.favicon,
-        source: metadata.source,
-        tags: tags ? {
-          connectOrCreate: tags.map(tag => ({
-            where: { id: tag },
+        url: validatedData.url,
+        title: validatedData.title,
+        description: validatedData.description,
+        notes: validatedData.notes,
+        folderId: validatedData.folderId,
+        tags: {
+          connectOrCreate: body.tags.map((tag: { name: string; color: string }) => ({
+            where: { 
+              name: tag.name, 
+            },
             create: { 
-              id: tag,
-              name: tag, 
-              color: `#${Math.floor(Math.random()*16777215).toString(16)}` 
-            }
-          }))
-        } : undefined,
-        shareUrl: linkData.isPublic ? `${process.env.NEXTAUTH_URL}/shared/link/${crypto.randomUUID()}` : null,
+              name: tag.name, 
+              color: tag.color, 
+            },
+          })),
+        },
+        userId: session.user.id,
       },
-      include: {
-        tags: true,
-        folder: { select: { id: true, name: true } }
-      }
+      include: { tags: true, folder: true },
     });
-    
-    return NextResponse.json(link);
+
+    return NextResponse.json({ linkData }, { status: 201 });
   } catch (error) {
     console.error('Failed to create link:', error);
     return NextResponse.json({ error: 'Failed to create link' }, { status: 500 });

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { authClient } from '@/lib/auth-client';
+import getUserSession from '@/utils/getUserData';
 import { z } from 'zod';
 import prisma from '@/lib/db';
 
@@ -15,15 +15,15 @@ const folderSchema = z.object({
 
 export async function GET(req: NextRequest) {
   try {
-    const session = authClient.useSession();
-    
+    const session = await getUserSession();
+
     if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-    
+    console.log(session.user.id);
     const folders = await prisma.folder.findMany({
       where: {
-        userId: session.data?.user.id
+        userId: session.user.id,
       },
       include: {
         _count: {
@@ -46,7 +46,7 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
-    const session = authClient.useSession();
+    const session = await getUserSession();
     
     if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -55,16 +55,25 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const validatedData = folderSchema.parse(body);
     
+    const existingFolder = await prisma.folder.findFirst({
+      where: {
+        name: validatedData.name,
+        userId: session.user.id,
+      },
+    });
+    if (existingFolder) { 
+      return NextResponse.json({ error: 'Folder with this name already exists' }, { status: 409 });
+    }
     const folder = await prisma.folder.create({
       data: {
         name: validatedData.name,
         color: validatedData.color,
         description: validatedData?.description || null,
-        userId: session.data?.user.id,
-        shareUrl: validatedData.isPublic ? `${process.env.NEXTAUTH_URL}/shared/folder/${crypto.randomUUID()}` : null,
+        userId: session.user.id,
+        shareUrl: validatedData.isPublic ? `${process.env.BETTER_AUTH_URL}/shared/folder/${crypto.randomUUID()}` : null,
       }
     });
-    
+    console.log(folder, "folder created");
     return NextResponse.json(folder);
   } catch (error) {
     console.error('Failed to create folder:', error);
