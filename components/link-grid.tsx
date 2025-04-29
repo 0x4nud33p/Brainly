@@ -8,6 +8,7 @@ import EditLinkModal from "./modals/edit-link-modal";
 import DeleteConfirmModal from "./modals/delete-confirm-modal";
 import AddLinkModal from "./modals/addlinkmodal";
 import { LinkGridProps } from "@/types/types";
+import sortLinks from "@/utils/sortLinks";
 
 export default function LinkGrid({
   selectedFolder,
@@ -43,11 +44,6 @@ export default function LinkGrid({
         const response = await fetch(url);
         if (response.ok) {
           const data = await response.json();
-          console.log("data while fetching links", data);
-          // const sortedData = data.map((link: LinkListItemProps["link"]) => {
-          //   return sortLinks([link], filters.sortBy)[0];
-          // });
-          // setLinks(sortedData);
           const processedLinks = data.map(
             (link: LinkListItemProps["link"]) => ({
               ...link,
@@ -57,7 +53,6 @@ export default function LinkGrid({
 
           const sortedLinks = sortLinks(processedLinks, filters.sortBy);
           setLinks(sortedLinks);
-          console.log("links ",links);
         }
       } catch (error) {
         console.error("Error fetching links:", error);
@@ -83,25 +78,7 @@ export default function LinkGrid({
     }
   }, [selectedFolder, searchQuery, selectedTag, filters]);
 
-  const sortLinks = (linksToSort: LinkListItemProps["link"][], sortBy: string) => {
-    switch (sortBy) {
-      case "oldest":
-        return [...linksToSort].sort(
-          (a, b) =>
-            new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-        );
-      case "alphabetical":
-        return [...linksToSort].sort((a, b) =>
-          (a.title || "").localeCompare(b.title || "")
-        );
-      case "newest":
-      default:
-        return [...linksToSort].sort(
-          (a, b) =>
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-        );
-    }
-  };
+
 
   const getDomains = () => {
     const domains = links
@@ -117,7 +94,7 @@ export default function LinkGrid({
     return [...new Set(domains)];
   };
 
-  const handleDeleteLink = async (id) => {
+  const handleDeleteLink = async (id:string) => {
     try {
       const response = await fetch(`/api/links/${id}`, {
         method: "DELETE",
@@ -132,7 +109,7 @@ export default function LinkGrid({
     }
   };
 
-  const handleUpdateLink = async (id, data) => {
+  const handleUpdateLink = async (id:string, data) => {
     try {
       const response = await fetch(`/api/links/${id}`, {
         method: "PATCH",
@@ -241,13 +218,18 @@ export default function LinkGrid({
 
         <div className="flex items-center gap-2">
           <button
+            onClick={() => setOpenAddLinkModal(true)}
+            className="inline-flex text-sm items-center px-3 py-2 rounded-md bg-indigo-600 hover:bg-indigo-500 text-white transition-colors"
+          >
+            Add link
+          </button>
+          <button
             onClick={() => setFilterOpen(!filterOpen)}
             className="inline-flex items-center justify-center rounded-md px-3 py-2 text-sm font-medium bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800"
           >
             <Filter className="h-4 w-4 mr-1" />
             Filter
           </button>
-
           <div className="flex items-center border border-slate-200 dark:border-slate-800 rounded-md overflow-hidden">
             <button
               onClick={() => setViewMode("grid")}

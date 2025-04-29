@@ -19,7 +19,7 @@ model User {
   sessions      Session[]
   accounts      Account[]
   folders       Folder[]
-  link          Link? 
+  link          Link[]
 
   @@map("user")
 }
@@ -94,7 +94,7 @@ model Link {
   notes        String?  @db.Text
   source       String? 
   folderId     String?
-  userId       String @unique
+  userId       String
   tags         Tag[]
   isPublic     Boolean  @default(false)
   shareUrl     String?  @unique
