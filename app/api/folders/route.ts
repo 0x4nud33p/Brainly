@@ -20,7 +20,6 @@ export async function GET(req: NextRequest) {
     if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-    console.log(session.user.id);
     const folders = await prisma.folder.findMany({
       where: {
         userId: session.user.id,
@@ -32,7 +31,6 @@ export async function GET(req: NextRequest) {
       },
       orderBy: { createdAt: 'desc' },
     });
-    console.log(folders,"folders");
     if(folders?.length === 0){
       return NextResponse.json({ message: 'No folders found Create Some folders' }, { status: 404 });
     }
@@ -73,7 +71,6 @@ export async function POST(req: NextRequest) {
         shareUrl: validatedData.isPublic ? `${process.env.BETTER_AUTH_URL}/shared/folder/${crypto.randomUUID()}` : null,
       }
     });
-    console.log(folder, "folder created");
     return NextResponse.json(folder);
   } catch (error) {
     console.error('Failed to create folder:', error);

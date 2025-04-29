@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import getUserSession from '@/utils/getUserData';
 import prisma from '@/lib/db';
-import { linkSchema } from './types';
+import { linkSchema } from './schema';
 
 export async function GET(req: NextRequest) {
   try {

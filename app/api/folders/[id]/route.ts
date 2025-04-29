@@ -1,18 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
-import { z } from 'zod';
-import { db } from '@/lib/db';
+import getUserSession from '@/utils/getUserData';
+import prisma from '@/lib/db';
+import { folderSchema } from '../schema';
 
 export async function GET(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await getServerSession(authOptions);
-    const id = params.id;
+    const session = await getUserSession();
+    const id = await params.id;
     
-    const folder = await db.folder.findUnique({
+    const folder = await prisma.folder.findUnique({
       where: { id },
       include: {
         links: {
@@ -44,7 +43,7 @@ export async function PATCH(
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await getServerSession(authOptions);
+    const session = await getUserSession();
     
     if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -54,7 +53,7 @@ export async function PATCH(
     const body = await req.json();
     const validatedData = folderSchema.parse(body);
     
-    const existingFolder = await db.folder.findUnique({
+    const existingFolder = await prisma.folder.findUnique({
       where: { id }
     });
     
@@ -76,7 +75,7 @@ export async function PATCH(
         null;
     }
     
-    const updatedFolder = await db.folder.update({
+    const updatedFolder = await prisma.folder.update({
       where: { id },
       data: updateData
     });
@@ -93,7 +92,7 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await getServerSession(authOptions);
+    const session = await getUserSession();
     
     if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -101,7 +100,7 @@ export async function DELETE(
     
     const id = params.id;
     
-    const folder = await db.folder.findUnique({
+    const folder = await prisma.folder.findUnique({
       where: { id }
     });
     
