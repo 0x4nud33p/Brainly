@@ -7,11 +7,11 @@ import {
   Tag,
 } from "lucide-react";
 
-export default function LinkCard({ link, onEdit, onDelete }) {
+export default function LinkCard({ link, onEdit, onDelete }: { link: any; onEdit: () => void; onDelete: () => void; }) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   // Extract domain from URL
-  const getDomain = (url) => {
+  const getDomain = (url:string) => {
     try {
       return new URL(url).hostname.replace("www.", "");
     } catch {
@@ -20,7 +20,7 @@ export default function LinkCard({ link, onEdit, onDelete }) {
   };
 
   // Format date to be more readable
-  const formatDate = (dateString) => {
+  const formatDate = (dateString:string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString("en-US", {
       month: "short",
@@ -69,12 +69,12 @@ export default function LinkCard({ link, onEdit, onDelete }) {
           <div className="flex flex-wrap gap-1 mb-3">
             {link.tags.map((tag) => (
               <a
-                key={tag}
-                href={`/dashboard?tag=${encodeURIComponent(tag)}`}
+                key={tag.id}
+                href={`/dashboard?tag=${encodeURIComponent(tag.name)}`}
                 className="inline-flex items-center rounded-full bg-indigo-100 px-2 py-0.5 text-xs font-medium text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-300"
               >
                 <Tag className="mr-1 h-3 w-3" />
-                {tag}
+                {tag.name}
               </a>
             ))}
           </div>

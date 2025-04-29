@@ -3,26 +3,25 @@
 import { useState, useEffect } from "react";
 import { Inbox, Loader2, Grid, List, Filter, X } from "lucide-react";
 import LinkCard from "./link-card";
-import LinkListItem from "./link-list-item";
+import LinkListItem, { LinkListItemProps } from "./link-list-item";
 import EditLinkModal from "./modals/edit-link-modal";
 import DeleteConfirmModal from "./modals/delete-confirm-modal";
 import AddLinkModal from "./modals/addlinkmodal";
 import { LinkGridProps } from "@/types/types";
-import { link } from "fs";
 
 export default function LinkGrid({
   selectedFolder,
   searchQuery,
   selectedTag,
 }: LinkGridProps) {
-  const [links, setLinks] = useState([]);
+  const [links, setLinks] = useState<LinkListItemProps["link"][]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [viewMode, setViewMode] = useState("grid");
   const [editLinkId, setEditLinkId] = useState(null);
   const [deleteLinkId, setDeleteLinkId] = useState(null);
   const [currentFolder, setCurrentFolder] = useState(null);
   const [filterOpen, setFilterOpen] = useState(false);
-  const [openAddLinkModal,setOpenAddLinkModal] = useState(false);
+  const [openAddLinkModal, setOpenAddLinkModal] = useState(false);
   const [filters, setFilters] = useState({
     domain: "",
     sortBy: "newest",
@@ -44,11 +43,21 @@ export default function LinkGrid({
         const response = await fetch(url);
         if (response.ok) {
           const data = await response.json();
-          console.log("data while fetching links",data);
-          const sortedData = data.map((link:any) => {
-            sortLinks([link], filters.sortBy)[0];
-          })
-          setLinks(sortedData);
+          console.log("data while fetching links", data);
+          // const sortedData = data.map((link: LinkListItemProps["link"]) => {
+          //   return sortLinks([link], filters.sortBy)[0];
+          // });
+          // setLinks(sortedData);
+          const processedLinks = data.map(
+            (link: LinkListItemProps["link"]) => ({
+              ...link,
+              createdAt: new Date(link.createdAt),
+            })
+          );
+
+          const sortedLinks = sortLinks(processedLinks, filters.sortBy);
+          setLinks(sortedLinks);
+          console.log("links ",links);
         }
       } catch (error) {
         console.error("Error fetching links:", error);
@@ -74,7 +83,7 @@ export default function LinkGrid({
     }
   }, [selectedFolder, searchQuery, selectedTag, filters]);
 
-  const sortLinks = (linksToSort, sortBy) => {
+  const sortLinks = (linksToSort: LinkListItemProps["link"][], sortBy: string) => {
     switch (sortBy) {
       case "oldest":
         return [...linksToSort].sort(
@@ -153,9 +162,7 @@ export default function LinkGrid({
     }
   };
 
-  const onClose = () => {
-
-  }
+  const onClose = () => {};
 
   const clearFilters = () => {
     setFilters({
@@ -349,7 +356,7 @@ export default function LinkGrid({
         <>
           {viewMode === "grid" ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {links.map((link) => (
+              {links?.map((link) => (
                 <LinkCard
                   key={link.id}
                   link={link}
@@ -360,7 +367,7 @@ export default function LinkGrid({
             </div>
           ) : (
             <div className="divide-y divide-slate-200 dark:divide-slate-800 -mx-4">
-              {links.map((link) => (
+              {links?.map((link) => (
                 <LinkListItem
                   key={link.id}
                   link={link}

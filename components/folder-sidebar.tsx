@@ -7,6 +7,7 @@ import { add, set } from "date-fns";
 import AddFolderModal from "./modals/addnewfoldermodal";
 import {getFolders} from "@/utils/getFolders";
 import { getTags } from "@/utils/getTags";
+import { FolderPropsTypes, TagPropsTypes } from "@/types/types";
 
 export default function FolderSidebar() {
   const router = useRouter();
@@ -14,9 +15,8 @@ export default function FolderSidebar() {
   const searchParams = useSearchParams();
   const currentFolderId = searchParams.get("folder");
   const currentTag = searchParams.get("tag");
-
-  const [folders, setFolders] = useState([]);
-  const [tags, setTags] = useState([]);
+  const [folders, setFolders] = useState<FolderPropsTypes[]>([]);
+  const [tags, setTags] = useState<TagPropsTypes[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [openAddFolderModal, setOpenAddFolderModal] = useState(false);
@@ -38,7 +38,7 @@ export default function FolderSidebar() {
   }, []);
 
   // Handle folder selection
-  const selectFolder = (folderId : string) => {
+  const selectFolder = (folderId: string | null) => {
     if (folderId) {
       router.push(`/dashboard?folder=${folderId}`);
     } else {
@@ -54,7 +54,7 @@ export default function FolderSidebar() {
   };
 
   // Check if item is selected
-  const isSelected = (type, id) => {
+  const isSelected = (type : string, id : string | null) => {
     if (type === "folder") {
       return id === currentFolderId;
     } else if (type === "tag") {
@@ -120,7 +120,7 @@ export default function FolderSidebar() {
               ))}
             </div>
           ) : (
-            folders.map((folder) => (
+            folders?.map((folder) => (
               <button
                 key={folder.id}
                 onClick={() => selectFolder(folder.id)}
@@ -138,11 +138,11 @@ export default function FolderSidebar() {
                   style={{ backgroundColor: folder.color || "#6366F1" }}
                 ></div>
                 <span className="truncate">{folder.name}</span>
-                {folder.linkCount > 0 && (
+                {/* {folder.linkCount > 0 && (
                   <span className="ml-auto text-xs text-slate-500 dark:text-slate-400">
                     {folder.linkCount}
                   </span>
-                )}
+                )} */}
               </button>
             ))
           )}
@@ -179,11 +179,11 @@ export default function FolderSidebar() {
                 >
                   <TagIcon className="h-3 w-3" />
                   {tag.name}
-                  {tag.count > 0 && (
+                  {/* {tag.count > 0 && (
                     <span className="ml-1 text-xs text-slate-500 dark:text-slate-400">
                       {tag.count}
                     </span>
-                  )}
+                  )} */}
                 </button>
               ))}
             </div>
