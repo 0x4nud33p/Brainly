@@ -48,13 +48,26 @@ export default function LinkCard({ link, onEdit, onDelete }: { link: any; onEdit
 
       <div className="p-4">
         {/* Title and domain */}
-        <div className="mb-2">
-          <h3 className="font-medium text-slate-900 dark:text-white mb-1 line-clamp-2">
-            {link.title || "Untitled Link"}
-          </h3>
-          <span className="text-xs text-slate-500 dark:text-slate-400">
-            {getDomain(link.url)}
-          </span>
+        <div className="mb-2 flex justify-between items-start">
+          <div>
+            <h3 className="font-medium text-slate-900 dark:text-white mb-1 line-clamp-2">
+              {link.title || "Untitled Link"}
+            </h3>
+            <span className="text-xs text-slate-500 dark:text-slate-400">
+              {getDomain(link.url)}
+            </span>
+          </div>
+          <div>
+            <a
+              href={link.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
+            >
+              <ExternalLink className="h-4 w-4 mr-2" />
+              Open link
+            </a>
+          </div>
         </div>
 
         {/* Description if available */}
@@ -99,15 +112,6 @@ export default function LinkCard({ link, onEdit, onDelete }: { link: any; onEdit
                 className="absolute right-0 bottom-8 z-10 bg-white dark:bg-slate-900 rounded-md shadow-lg border border-slate-200 dark:border-slate-800 py-1 min-w-32"
                 onBlur={() => setMenuOpen(false)}
               >
-                <a
-                  href={link.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
-                >
-                  <ExternalLink className="h-4 w-4 mr-2" />
-                  Open link
-                </a>
                 <button
                   onClick={() => {
                     onEdit();
