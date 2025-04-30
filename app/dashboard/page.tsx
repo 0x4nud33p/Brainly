@@ -35,7 +35,16 @@ export default function DashboardPage() {
   if (isLoading || !user) {
     return 
     <>
-      <DashboardSkeleton />
+      <div className="flex min-h-screen flex-col">
+        <Toaster richColors position="bottom-right" closeButton />
+        <DashboardHeader />
+        <div className="container flex-1 items-start gap-6 md:grid md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
+          <FolderSidebar />
+          <main className="flex w-full flex-col overflow-hidden">
+            <DashboardSkeleton />
+          </main>
+        </div>
+      </div>
     </>
   }
 
@@ -43,7 +52,7 @@ export default function DashboardPage() {
     <div className="flex min-h-screen flex-col">
       <Toaster richColors position="bottom-right" closeButton />
       <DashboardHeader />
-      <div className="container flex-1 items-start gap-6 md:grid md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
+      <div className="container flex-1 items-start md:grid md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr] gap-x-6">
         <FolderSidebar />
         <main className="flex w-full flex-col overflow-hidden">
           <LinkGrid
