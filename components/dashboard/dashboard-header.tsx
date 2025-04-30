@@ -15,6 +15,7 @@ import {
   Share2,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
+import { toast } from "sonner";
 
 export default function DashboardHeader() {
   const router = useRouter();
@@ -36,6 +37,13 @@ export default function DashboardHeader() {
       router.push("/dashboard");
     }
   };
+
+  const handleShare = () => {
+    navigator.clipboard.writeText(window.location.href).then(() => {
+      toast("Link copied to clipboard!", {
+        description: "You can now share this link with others.",})
+    })
+  }
 
   return (
     <header className="sticky top-0 z-30 w-full border-b border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-950/90 backdrop-blur supports-backdrop-blur:bg-white/60">
@@ -69,7 +77,10 @@ export default function DashboardHeader() {
                 className="w-full pl-10 pr-4 py-2 border border-slate-200 dark:border-slate-700 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-slate-800 dark:text-white"
               />
             </div>
-            <button className="ml-2 p-2 rounded-md text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white">
+            <button 
+            className="ml-2 p-2 rounded-md hover:cursor-pointer text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
+            onClick={() => handleShare()}
+            >
               <Share2 />
             </button>
           </form>

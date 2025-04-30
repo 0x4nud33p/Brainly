@@ -9,10 +9,16 @@ export default function DeleteConfirmModal({
   onConfirm,
   title,
   message,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+  title?: string;
+  message?: string;
 }) {
   // Close modal on Escape key
   useEffect(() => {
-    const handleEsc = (e) => {
+    const handleEsc = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
     };
 

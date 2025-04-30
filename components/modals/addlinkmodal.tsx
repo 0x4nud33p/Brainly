@@ -5,6 +5,7 @@ import { X, Loader2, Plus, Link as LinkIcon } from "lucide-react";
 import { colorOptions } from "@/lib/data/data";
 import { FolderPropsTypes, LinkPropsTypes, TagPropsTypes } from "@/types/types";
 import { getFolders } from "@/utils/getFolders";
+import { toast } from "sonner";
 
 export default function AddLinkModal({
   isOpen,
@@ -124,7 +125,7 @@ export default function AddLinkModal({
         folderId: "",
         tags: [],
       });
-
+      toast.success("Link added successfully!");
       onClose();
     } catch (error) {
       console.error("Error adding link:", error);

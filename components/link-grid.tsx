@@ -9,6 +9,7 @@ import DeleteConfirmModal from "./modals/delete-confirm-modal";
 import AddLinkModal from "./modals/addlinkmodal";
 import { LinkGridProps } from "@/types/types";
 import sortLinks from "@/utils/sortLinks";
+import { toast } from "sonner";
 
 export default function LinkGrid({
   selectedFolder,
@@ -107,6 +108,7 @@ export default function LinkGrid({
         setLinks(links.filter((link) => link.id !== id));
         setDeleteLinkId(null);
       }
+      toast.success("Link deleted successfully!");
     } catch (error) {
       console.error("Error deleting link:", error);
     }

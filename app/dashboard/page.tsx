@@ -7,6 +7,7 @@ import DashboardHeader from "@/components/dashboard/dashboard-header";
 import DashboardSkeleton from "@/components/dashboard/dashboard-skeleton";
 import { useAuth } from "@/hooks/useAuth";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Toaster } from "sonner";
 
 export const dynamic = "force-dynamic";
 
@@ -40,15 +41,16 @@ export default function DashboardPage() {
 
   return (
     <div className="flex min-h-screen flex-col">
+      <Toaster richColors position="bottom-right" closeButton />
       <DashboardHeader />
       <div className="container flex-1 items-start gap-6 md:grid md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
         <FolderSidebar />
         <main className="flex w-full flex-col overflow-hidden">
-            <LinkGrid
-              selectedFolder={folder}
-              searchQuery={search}
-              selectedTag={tag}
-            />
+          <LinkGrid
+            selectedFolder={folder}
+            searchQuery={search}
+            selectedTag={tag}
+          />
         </main>
       </div>
     </div>
