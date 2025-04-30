@@ -1,19 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
+import getUserSession from '@/utils/getUserData';
 import { z } from 'zod';
-import { db } from '@/lib/db';
-import { getLinkMetadata } from '@/lib/metadata';
+import prisma from '@/lib/db';
+import {linkSchema} from "../schema"
 
 export async function GET(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await getServerSession(authOptions);
+    const session = await getUserSession();
     const id = params.id;
     
-    const link = await db.link.findUnique({
+    const link = await prisma.link.findUnique({
       where: { id },
       include: {
         tags: true,
@@ -41,7 +40,7 @@ export async function PATCH(
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await getServerSession(authOptions);
+    const session = await getUserSession();
     
     if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -49,20 +48,11 @@ export async function PATCH(
     
     const id = params.id;
     const body = await req.json();
-    const linkSchema = z.object({
-      url: z.string().url().optional(),
-      title: z.string().optional(),
-      description: z.string().optional(),
-      notes: z.string().optional(),
-      folderId: z.string().optional().nullable(),
-      tags: z.array(z.string()).optional(),
-      isPublic: z.boolean().optional(),
-    });
     
     const validatedData = linkSchema.parse(body);
     const { tags, ...linkData } = validatedData;
     
-    const existingLink = await db.link.findUnique({
+    const existingLink = await prisma.link.findUnique({
       where: { id },
       include: { tags: true }
     });
@@ -74,21 +64,13 @@ export async function PATCH(
     if (existingLink.userId !== session.user.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-    
-    let metadata = {};
-    if (linkData.url && linkData.url !== existingLink.url) {
-      metadata = await getLinkMetadata(linkData.url);
-    }
-    
-    const updateData: any = {
+
+    const updateData = {
       ...linkData,
-      ...metadata,
+      updatedAt: new Date()
     };
-    
-    if (typeof linkData.isPublic !== 'undefined' && linkData.isPublic !== existingLink.isPublic) {
-      updateData.shareUrl = linkData.isPublic ? 
-        `${process.env.NEXTAUTH_URL}/shared/link/${crypto.randomUUID()}` : 
-        null;
+    if (linkData.folderId === '') {
+      delete updateData.folderId;
     }
     
     let tagUpdateData = {};
@@ -106,7 +88,7 @@ export async function PATCH(
       };
     }
     
-    const updatedLink = await db.link.update({
+    const updatedLink = await prisma.link.update({
       where: { id },
       data: {
         ...updateData,
@@ -130,32 +112,33 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await getServerSession(authOptions);
-    
+    const session = await getUserSession();
+
     if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-    
+
     const id = params.id;
-    
+
     // Check if link exists and belongs to user
-    const link = await db.link.findUnique({
+    const link = await prisma.link.findUnique({
       where: { id }
     });
-    
+
     if (!link) {
       return NextResponse.json({ error: 'Link not found' }, { status: 404 });
     }
-    
+
     if (link.userId !== session.user.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-    
-    await db.link.delete({
+
+    await prisma.link.delete({
       where: { id }
     });
-    
+
     return NextResponse.json({ success: true });
+
   } catch (error) {
     console.error('Failed to delete link:', error);
     return NextResponse.json({ error: 'Failed to delete link' }, { status: 500 });

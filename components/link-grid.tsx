@@ -18,8 +18,11 @@ export default function LinkGrid({
   const [links, setLinks] = useState<LinkListItemProps["link"][]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [viewMode, setViewMode] = useState("grid");
-  const [editLinkId, setEditLinkId] = useState(null);
-  const [deleteLinkId, setDeleteLinkId] = useState(null);
+  const [editLinkId, setEditLinkId] = useState<string | null>(null);
+  const [editLink, setEditLink] = useState<LinkListItemProps["link"] | null>(
+    null
+  );
+  const [deleteLinkId, setDeleteLinkId] = useState<string | null>(null);
   const [currentFolder, setCurrentFolder] = useState(null);
   const [filterOpen, setFilterOpen] = useState(false);
   const [openAddLinkModal, setOpenAddLinkModal] = useState(false);
@@ -342,7 +345,7 @@ export default function LinkGrid({
                 <LinkCard
                   key={link.id}
                   link={link}
-                  onEdit={() => setEditLinkId(link.id)}
+                  onEdit={() => setEditLink(link)}
                   onDelete={() => setDeleteLinkId(link.id)}
                 />
               ))}
@@ -362,12 +365,12 @@ export default function LinkGrid({
         </>
       )}
 
-      {editLinkId && (
+      {editLink && (
         <EditLinkModal
-          linkId={editLinkId}
-          isOpen={!!editLinkId}
-          onClose={() => setEditLinkId(null)}
-          onSubmit={(data) => handleUpdateLink(editLinkId, data)}
+          link={editLink}
+          isOpen={!!editLink}
+          onClose={() => setEditLink(null)}
+          onSubmit={(data) => handleUpdateLink(editLink.id, data)}
         />
       )}
 
