@@ -33,7 +33,7 @@ export default function LinkListItem({
   const domain = getDomain(link.url);
 
   return (
-    <div className="flex items-center py-4 px-4 hover:bg-slate-50 dark:hover:bg-slate-900/60 transition-colors">
+    <div className="flex items-center py-6 px-6 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-900/60 transition-colors">
       {/* Favicon */}
       <div className="flex-shrink-0 mr-4">
         {link.favicon ? (
@@ -58,22 +58,18 @@ export default function LinkListItem({
           <span>{format(new Date(link.createdAt), "MMM d, yyyy")}</span>
         </div>
 
-        {(link?.tags ?? []).length > 0 && (
-          <div className="flex flex-wrap gap-1 mt-2">
-            {link?.tags.slice(0, 3).map((tagItem) => (
-              <span
-                key={tagItem.tag.id}
-                className="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-full px-2 py-0.5 text-xs flex items-center gap-1"
+        {link.tags && link.tags.length > 0 && (
+          <div className="flex flex-wrap gap-1 mb-3 mt-2">
+            {link.tags.map((tag) => (
+              <a
+                key={tag.id}
+                href={`/dashboard?tag=${encodeURIComponent(tag.name)}`}
+                className="inline-flex items-center rounded-full bg-indigo-100 px-2 py-0.5 text-xs font-medium text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-300"
               >
-                <Tag size={10} />
-                {tagItem.tag.name}
-              </span>
+                <Tag className="mr-1 h-3 w-3" />
+                {tag.name}
+              </a>
             ))}
-            {link.tags.length > 3 && (
-              <span className="text-xs text-slate-500 dark:text-slate-400">
-                +{link.tags.length - 3} more
-              </span>
-            )}
           </div>
         )}
       </div>

@@ -13,7 +13,6 @@ import {
   X,
   User,
   Share2,
-  Settings,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -101,14 +100,6 @@ export default function DashboardHeader() {
                       <span className="font-medium">{user?.name}</span>
                     </div>
                   )}
-
-                  <Link
-                    href="/settings"
-                    className="flex items-center px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
-                  >
-                    <Settings className="h-4 w-4 mr-2" />
-                    Settings
-                  </Link>
 
                   <button
                     onClick={() => signOut()}

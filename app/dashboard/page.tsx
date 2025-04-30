@@ -32,7 +32,10 @@ export default function DashboardPage() {
   }, [user, isLoading, router]);
 
   if (isLoading || !user) {
-    return <div>Loading...</div>;
+    return 
+    <>
+      <DashboardSkeleton />
+    </>
   }
 
   return (
@@ -41,7 +44,6 @@ export default function DashboardPage() {
       <div className="container flex-1 items-start gap-6 md:grid md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
         <FolderSidebar />
         <main className="flex w-full flex-col overflow-hidden">
-          {/* <DashboardSkeleton /> */}
             <LinkGrid
               selectedFolder={folder}
               searchQuery={search}
