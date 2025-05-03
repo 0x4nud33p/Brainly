@@ -9,6 +9,7 @@ export type LinkListItemProps = {
     description?: string;
     image?: string;
     favicon?: string;
+    folderId?:string;
     createdAt: Date;
     tags?: { id: string; name: string; color?: string }[];
   };

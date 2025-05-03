@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { X, Loader2, Plus } from "lucide-react";
 import type { LinkListItemProps } from "../link-list-item";
+import { getFolders } from "@/utils/getFolders";
 
 type Folder = {
   id: string;
@@ -10,19 +11,18 @@ type Folder = {
 };
 
 type EditLinkModalProps = {
-  linkId: string | null;
+  link: LinkListItemProps["link"] | null;
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (data: any) => Promise<void>;
 };
 
 export default function EditLinkModal({
-  linkId,
+  link,
   isOpen,
   onClose,
   onSubmit,
 }: EditLinkModalProps) {
-  const [link, setLink] = useState<LinkListItemProps["link"] | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [formData, setFormData] = useState({
@@ -37,41 +37,28 @@ export default function EditLinkModal({
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (!isOpen || !linkId) return;
+    if (link && isOpen) {
+      setFormData({
+        title: link.title || "",
+        url: link.url,
+        description: link.description || "",
+        folderId: link.folderId || "",
+        tags: link.tags?.map((t) => t.name) || [],
+      });
+      setIsLoading(false);
+    }
+  }, [link, isOpen]);
 
-    const fetchData = async () => {
+  // Fetch folders (dummy example)
+  useEffect(() => {
+    const fetchFolders = async () => {
       setIsLoading(true);
-      try {
-        const [linkRes, foldersRes] = await Promise.all([
-          fetch(`/api/links/${linkId}`),
-          fetch("/api/folders"),
-        ]);
-
-        if (!linkRes.ok) throw new Error("Failed to fetch link");
-        const linkData = await linkRes.json();
-
-        if (!foldersRes.ok) throw new Error("Failed to fetch folders");
-        const folderData = await foldersRes.json();
-
-        setLink(linkData);
-        setFormData({
-          title: linkData.title || "",
-          url: linkData.url || "",
-          description: linkData.description || "",
-          folderId: linkData.folderId || "",
-          tags: linkData.tags || [],
-        });
-        setFolders(folderData);
-      } catch (err) {
-        setError("Failed to load link or folders.");
-        console.error(err);
-      } finally {
-        setIsLoading(false);
-      }
+      const data = await getFolders();
+      setFolders(data);
     };
 
-    fetchData();
-  }, [isOpen, linkId]);
+    fetchFolders();
+  }, []);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -104,6 +91,7 @@ export default function EditLinkModal({
 
     try {
       await onSubmit(formData);
+      onClose();
     } catch (err) {
       setError("Failed to save changes.");
       console.error(err);

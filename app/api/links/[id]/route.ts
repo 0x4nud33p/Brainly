@@ -45,7 +45,7 @@ export async function PATCH(
     if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-    
+    console.log("backend patch");
     const id = params.id;
     const body = await req.json();
     
