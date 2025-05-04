@@ -358,7 +358,7 @@ export default function LinkGrid({
                 <LinkListItem
                   key={link.id}
                   link={link}
-                  onEdit={() => setEditLinkId(link.id)}
+                  onEdit={() => setEditLink(link)}
                   onDelete={() => setDeleteLinkId(link.id)}
                 />
               ))}

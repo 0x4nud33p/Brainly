@@ -45,12 +45,12 @@ export async function PATCH(
     if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-    console.log("backend patch");
-    const id = params.id;
+
+    const id = await params.id;
     const body = await req.json();
     
-    const validatedData = linkSchema.parse(body);
-    const { tags, ...linkData } = validatedData;
+    
+    const { tags, ...linkData } = body;
     
     const existingLink = await prisma.link.findUnique({
       where: { id },

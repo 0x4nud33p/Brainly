@@ -49,12 +49,13 @@ export default function EditLinkModal({
     }
   }, [link, isOpen]);
 
-  // Fetch folders (dummy example)
+  // Fetch folders 
   useEffect(() => {
     const fetchFolders = async () => {
       setIsLoading(true);
       const data = await getFolders();
       setFolders(data);
+      setIsLoading(false);
     };
 
     fetchFolders();
