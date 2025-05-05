@@ -46,9 +46,8 @@ export async function PATCH(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const id = await params.id;
+    const id = params.id;
     const body = await req.json();
-    
     
     const { tags, ...linkData } = body;
     
@@ -56,7 +55,7 @@ export async function PATCH(
       where: { id },
       include: { tags: true }
     });
-    
+
     if (!existingLink) {
       return NextResponse.json({ error: 'Link not found' }, { status: 404 });
     }

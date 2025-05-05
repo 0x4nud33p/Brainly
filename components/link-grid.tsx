@@ -114,7 +114,7 @@ export default function LinkGrid({
     }
   };
 
-  const handleUpdateLink = async (id:string, data) => {
+  const handleUpdateLink = async (id:string, data:any) => {
     try {
       const response = await fetch(`/api/links/${id}`, {
         method: "PATCH",
