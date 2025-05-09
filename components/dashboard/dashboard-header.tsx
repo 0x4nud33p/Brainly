@@ -5,9 +5,6 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   Search,
-  Plus,
-  Sun,
-  Moon,
   LogOut,
   Menu,
   X,
@@ -24,7 +21,7 @@ export default function DashboardHeader() {
   const [searchQuery, setSearchQuery] = useState(
     searchParams.get("search") || ""
   );
-  const { user, isLoading, signOut } = useAuth();
+  const { user, signOut } = useAuth();
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

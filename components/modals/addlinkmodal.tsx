@@ -94,7 +94,8 @@ export default function AddLinkModal({
     try {
       try {
         new URL(formData.url);
-      } catch (e) {
+      } catch (error) {
+        console.error(error);
         throw new Error(
           "Please enter a valid URL including http:// or https://"
         );

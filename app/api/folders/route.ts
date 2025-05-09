@@ -13,7 +13,7 @@ const folderSchema = z.object({
 });
 
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
     const session = await getUserSession();
 

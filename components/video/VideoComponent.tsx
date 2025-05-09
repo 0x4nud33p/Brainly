@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Ref, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 
 export default function Video() {
   const videoRef = useRef<HTMLVideoElement | null>(null);

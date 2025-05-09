@@ -1,9 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { PlusCircle, FolderPlus, Inbox, TagIcon } from "lucide-react";
-import { add, set } from "date-fns";
 import AddFolderModal from "./modals/addnewfoldermodal";
 import {getFolders} from "@/utils/getFolders";
 import { getTags } from "@/utils/getTags";
@@ -11,7 +10,6 @@ import { FolderPropsTypes, TagPropsTypes } from "@/types/types";
 
 export default function FolderSidebar() {
   const router = useRouter();
-  const pathname = usePathname();
   const searchParams = useSearchParams();
   const currentFolderId = searchParams.get("folder");
   const currentTag = searchParams.get("tag");

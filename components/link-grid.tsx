@@ -19,7 +19,6 @@ export default function LinkGrid({
   const [links, setLinks] = useState<LinkListItemProps["link"][]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [viewMode, setViewMode] = useState("grid");
-  const [editLinkId, setEditLinkId] = useState<string | null>(null);
   const [editLink, setEditLink] = useState<LinkListItemProps["link"] | null>(
     null
   );
@@ -125,7 +124,6 @@ export default function LinkGrid({
       if (response.ok) {
         const updatedLink = await response.json();
         setLinks(links.map((link) => (link.id === id ? updatedLink : link)));
-        setEditLinkId(null);
       }
     } catch (error) {
       console.error("Error updating link:", error);
@@ -143,8 +141,6 @@ export default function LinkGrid({
       return "All Links";
     }
   };
-
-  const onClose = () => {};
 
   const clearFilters = () => {
     setFilters({
