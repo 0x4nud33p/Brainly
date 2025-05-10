@@ -16,6 +16,7 @@ export async function GET(req: NextRequest) {
     const source = searchParams.get('source');
     const query = searchParams.get('query');
     
+    //@ts-ignore
     const whereClause: any = {
       userId: session.user.id,
     };
