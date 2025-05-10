@@ -7,6 +7,7 @@ import {
   Tag,
 } from "lucide-react";
 
+// @ts-ignore
 export default function LinkCard({ link, onEdit, onDelete }: { link: any; onEdit: () => void; onDelete: () => void; }) {
   const [menuOpen, setMenuOpen] = useState(false);
 

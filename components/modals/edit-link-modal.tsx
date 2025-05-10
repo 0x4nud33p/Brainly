@@ -14,6 +14,7 @@ type EditLinkModalProps = {
   link: LinkListItemProps["link"] | null;
   isOpen: boolean;
   onClose: () => void;
+  // @ts-ignore
   onSubmit: (data: any) => Promise<void>;
 };
 

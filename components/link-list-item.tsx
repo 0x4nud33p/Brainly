@@ -27,6 +27,7 @@ export default function LinkListItem({
       const domain = new URL(url).hostname;
       return domain.replace("www.", "");
     } catch (error) {
+      console.error(error);
       return url;
     }
   };
