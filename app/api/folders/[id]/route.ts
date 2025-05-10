@@ -4,7 +4,6 @@ import prisma from '@/lib/db';
 import { folderSchema } from '../schema';
 
 export async function GET(
-  req: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
@@ -112,7 +111,7 @@ export async function DELETE(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
     
-    await db.folder.delete({
+    await prisma.folder.delete({
       where: { id }
     });
     
