@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { PlusCircle, FolderPlus, Inbox, TagIcon } from "lucide-react";
 import AddFolderModal from "./modals/addnewfoldermodal";
-import {getFolders} from "@/utils/getFolders";
+import { getFolders } from "@/utils/getFolders";
 import { getTags } from "@/utils/getTags";
 import { FolderPropsTypes, TagPropsTypes } from "@/types/types";
 
@@ -19,19 +19,19 @@ export default function FolderSidebar() {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [openAddFolderModal, setOpenAddFolderModal] = useState(false);
 
+  const fetchFolders = async () => {
+    const folders = await getFolders();
+    setFolders(folders);
+  };
+
+  const fetchTags = async () => {
+    const tagsData = await getTags();
+    setTags(tagsData);
+    setIsLoading(false);
+  };
+
   useEffect(() => {
-    const fetchFolders = async () => {
-      const folders = await getFolders();
-      setFolders(folders);
-    };
     fetchFolders();
-
-    const fetchTags = async () => {
-      const tagsData = await getTags();
-      setTags(tagsData);
-      setIsLoading(false);
-    };
-
     fetchTags();
   }, []);
 
@@ -46,13 +46,13 @@ export default function FolderSidebar() {
   };
 
   // Handle tag selection
-  const selectTag = (tagName : string) => {
+  const selectTag = (tagName: string) => {
     router.push(`/dashboard?tag=${encodeURIComponent(tagName)}`);
     setIsMobileOpen(false);
   };
 
   // Check if item is selected
-  const isSelected = (type : string, id : string | null) => {
+  const isSelected = (type: string, id: string | null) => {
     if (type === "folder") {
       return id === currentFolderId;
     } else if (type === "tag") {
@@ -76,6 +76,7 @@ export default function FolderSidebar() {
           <AddFolderModal
             isOpen={openAddFolderModal}
             onClose={() => setOpenAddFolderModal(false)}
+            onFolderAdded={fetchFolders}
           />
         )}
         <div className="flex items-center justify-between mb-2">

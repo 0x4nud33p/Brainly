@@ -113,6 +113,8 @@ export default function AddLinkModal({
       });
       if (!res.ok) {
         const errorData = await res.json();
+        console.log("Error response:", errorData);
+        toast.error("Failed to add link.");
         throw new Error(errorData.message || "Failed to add link.");
       }
       const data = await res.json();
@@ -142,7 +144,7 @@ export default function AddLinkModal({
 
   // Close modal on Escape key
   useEffect(() => {
-    const handleEsc = (e) => {
+    const handleEsc = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
     };
 

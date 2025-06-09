@@ -1,9 +1,11 @@
+"use client";
+
 import { useState, useEffect } from "react";
 import { colorOptions } from "@/lib/data/data";
 import { X, Loader2, Folder, Check } from "lucide-react";
 import {toast} from "sonner"
 
-export default function AddFolderModal({ isOpen, onClose } : { isOpen: boolean, onClose: () => void }) {
+export default function AddFolderModal({ isOpen, onClose, onFolderAdded } : { isOpen: boolean, onClose: () => void, onFolderAdded?: () => void }) {
   const [isLoading, setIsLoading] = useState(false);
   const [folderName, setFolderName] = useState("");
   const [folderColor, setFolderColor] = useState("blue");
@@ -43,7 +45,8 @@ export default function AddFolderModal({ isOpen, onClose } : { isOpen: boolean, 
       });
 
       if (!response.ok) {
-        throw new Error("Failed to create folder");
+        toast.error("Folder with this name already exists");
+        return;
       }
       const data = await response.json();
       if (!data) {
@@ -53,7 +56,7 @@ export default function AddFolderModal({ isOpen, onClose } : { isOpen: boolean, 
       setFolderColor("blue");
       onClose();
       toast.success("Folder created successfully!");
-      // call a function to refresh the folder list or update the UI as needed
+      onFolderAdded?.();
     } catch (error) {
       console.error("Error adding folder:", error);
       if (error instanceof Error) {
