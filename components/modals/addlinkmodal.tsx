@@ -10,9 +10,11 @@ import { toast } from "sonner";
 export default function AddLinkModal({
   isOpen,
   onClose,
+  onLinkAdded,
 }: {
   isOpen: boolean;
   onClose: () => void;
+  onLinkAdded?: () => void;
 }) {
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState<LinkPropsTypes>({
@@ -115,7 +117,7 @@ export default function AddLinkModal({
         const errorData = await res.json();
         console.log("Error response:", errorData);
         toast.error("Failed to add link.");
-        throw new Error(errorData.message || "Failed to add link.");
+        return;
       }
       const data = await res.json();
       if (data.error) {
@@ -129,6 +131,7 @@ export default function AddLinkModal({
         tags: [],
       });
       toast.success("Link added successfully!");
+      onLinkAdded?.();
       onClose();
     } catch (error) {
       console.error("Error adding link:", error);

@@ -88,6 +88,10 @@ export async function POST(req: NextRequest) {
       include: { tags: true, folder: true },
     });
 
+    if(!linkData) {
+      return NextResponse.json({ error: 'Link creation failed' }, { status: 400 });
+    }
+
     return NextResponse.json({ linkData }, { status: 201 });
   } catch (error) {
     console.error('Failed to create link:', error);

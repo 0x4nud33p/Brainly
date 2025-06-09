@@ -31,39 +31,37 @@ export default function LinkGrid({
     sortBy: "newest",
   });
 
+  const fetchLinks = async () => {
+    try {
+      setIsLoading(true);
+
+      let url = "/api/links?";
+      if (selectedFolder) url += `folderId=${selectedFolder}&`;
+      if (searchQuery) url += `query=${encodeURIComponent(searchQuery)}&`;
+      if (selectedTag) url += `tag=${encodeURIComponent(selectedTag)}&`;
+      if (filters.domain)
+        url += `domain=${encodeURIComponent(filters.domain)}&`;
+
+      const response = await fetch(url);
+      if (response.ok) {
+        const data = await response.json();
+        const processedLinks = data.map((link: LinkListItemProps["link"]) => ({
+          ...link,
+          createdAt: new Date(link.createdAt),
+        }));
+
+        const sortedLinks = sortLinks(processedLinks, filters.sortBy);
+        setLinks(sortedLinks);
+      }
+    } catch (error) {
+      console.error("Error fetching links:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   // This effect fetches links based on the selected folder, search query, and selected tag.
   useEffect(() => {
-    const fetchLinks = async () => {
-      try {
-        setIsLoading(true);
-
-        let url = "/api/links?";
-        if (selectedFolder) url += `folderId=${selectedFolder}&`;
-        if (searchQuery) url += `query=${encodeURIComponent(searchQuery)}&`;
-        if (selectedTag) url += `tag=${encodeURIComponent(selectedTag)}&`;
-        if (filters.domain)
-          url += `domain=${encodeURIComponent(filters.domain)}&`;
-
-        const response = await fetch(url);
-        if (response.ok) {
-          const data = await response.json();
-          const processedLinks = data.map(
-            (link: LinkListItemProps["link"]) => ({
-              ...link,
-              createdAt: new Date(link.createdAt),
-            })
-          );
-
-          const sortedLinks = sortLinks(processedLinks, filters.sortBy);
-          setLinks(sortedLinks);
-        }
-      } catch (error) {
-        console.error("Error fetching links:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     fetchLinks();
 
     // Fetch folder information if selectedFolder is provided
@@ -156,6 +154,7 @@ export default function LinkGrid({
         <AddLinkModal
           isOpen={true}
           onClose={() => setOpenAddLinkModal(false)}
+          onLinkAdded={() => fetchLinks()}
         />
       )}
       <div className="mt-2 ml-4 flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
