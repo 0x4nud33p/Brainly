@@ -4,12 +4,13 @@ import prisma from '@/lib/db';
 import { folderSchema } from '../schema';
 
 export async function GET(
-  { params }: { params: { id: string } }
+  req: NextRequest,
+  context: { params: { id: string } }
 ) {
   try {
     const session = await getUserSession();
-    const id = await params.id;
-    
+    const id = context.params.id;
+
     const folder = await prisma.folder.findUnique({
       where: { id },
       include: {
@@ -21,15 +22,15 @@ export async function GET(
         }
       }
     });
-    
+
     if (!folder) {
       return NextResponse.json({ error: 'Folder not found' }, { status: 404 });
     }
-    
+
     if (folder.userId !== session?.user?.id && !folder.isPublic) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-    
+
     return NextResponse.json(folder);
   } catch (error) {
     console.error('Failed to get folder:', error);
@@ -70,8 +71,8 @@ export async function PATCH(
     
     if (typeof validatedData.isPublic !== 'undefined' && validatedData.isPublic !== existingFolder.isPublic) {
       updateData.shareUrl = validatedData.isPublic ? 
-        `${process.env.NEXTAUTH_URL}/shared/folder/${crypto.randomUUID()}` : 
-        null;
+        `${process.env.BETTER_AUTH_URL}/shared/folder/${crypto.randomUUID()}` : 
+        undefined;
     }
     
     const updatedFolder = await prisma.folder.update({
