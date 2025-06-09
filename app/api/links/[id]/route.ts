@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import getUserSession from '@/utils/getUserData';
 import prisma from '@/lib/db';
+import { TagPropsTypes } from '@/types/types';
 
 export async function GET(
   req: NextRequest,
@@ -74,7 +75,7 @@ export async function PATCH(
     if (tags) {
       tagUpdateData = {
         disconnect: existingLink.tags.map(tag => ({ id: tag.id })),
-        connectOrCreate: tags.map(tag => ({
+        connectOrCreate: tags.map((tag: TagPropsTypes) => ({
           where: { id: tag },
           create: { 
             id: tag,

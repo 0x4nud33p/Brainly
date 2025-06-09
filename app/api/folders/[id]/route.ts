@@ -5,11 +5,11 @@ import { folderSchema } from '../schema';
 
 export async function GET(
   req: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: { id: string } }
 ) {
   try {
     const session = await getUserSession();
-    const id = context.params.id;
+    const id = params.id;
 
     const folder = await prisma.folder.findUnique({
       where: { id },
