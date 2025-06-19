@@ -5,11 +5,11 @@ import { TagPropsTypes } from '@/types/types';
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getUserSession();
-    const id = params.id;
+    const id = (await params).id;
     
     const link = await prisma.link.findUnique({
       where: { id },
@@ -36,7 +36,7 @@ export async function GET(
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getUserSession();
@@ -45,7 +45,7 @@ export async function PATCH(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const id = params.id;
+    const id = (await params).id;
     const body = await req.json();
     
     const { tags, ...linkData } = body;
@@ -107,7 +107,7 @@ export async function PATCH(
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getUserSession();
@@ -116,7 +116,7 @@ export async function DELETE(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const id = params.id;
+    const id = (await params).id;
 
     // Check if link exists and belongs to user
     const link = await prisma.link.findUnique({

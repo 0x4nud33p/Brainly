@@ -23,7 +23,7 @@ export default function LinkGrid({
     null
   );
   const [deleteLinkId, setDeleteLinkId] = useState<string | null>(null);
-  const [currentFolder, setCurrentFolder] = useState(null);
+  const [currentFolder, setCurrentFolder] = useState<{ name: string } | null>(null);
   const [filterOpen, setFilterOpen] = useState(false);
   const [openAddLinkModal, setOpenAddLinkModal] = useState(false);
   const [filters, setFilters] = useState({

@@ -6,9 +6,9 @@ async function main() {
 
   const user = await prisma.user.create({
     data: {
+      id: "1",
       name: "John Doe",
       email: "john@example.com",
-      password,
       folders: {
         create: [
           {
@@ -29,7 +29,7 @@ async function main() {
           },
         ],
       },
-      links: {
+      link: {
         create: [
           {
             url: "https://anotherexample.com",

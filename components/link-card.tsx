@@ -41,7 +41,7 @@ export default function LinkCard({ link, onEdit, onDelete }: { link: any; onEdit
             className="w-full h-full object-cover"
             onError={(e) => {
               // Hide the image on error
-              e.target.style.display = "none";
+              (e.target as HTMLImageElement).style.display = "none";
             }}
           />
         </div>
@@ -80,7 +80,7 @@ export default function LinkCard({ link, onEdit, onDelete }: { link: any; onEdit
         {/* Tags */}
         {link.tags && link.tags.length > 0 && (
           <div className="flex flex-wrap gap-1 mb-3">
-            {link.tags.map((tag) => (
+            {link.tags.map((tag:any) => (
               <a
                 key={tag.id}
                 href={`/dashboard?tag=${encodeURIComponent(tag.name)}`}
