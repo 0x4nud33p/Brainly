@@ -14,10 +14,11 @@ export default function SignUpWithGoogle() {
   const handleGoogleSignUp = async () => {
     setLoading(true);
     try {
-      await authClient.signIn.social({
+      const res = await authClient.signIn.social({
         provider: "google",
         callbackURL: "/dashboard",
       });
+      console.log("Login response",res);
     } catch (error) {
       console.error("Google sign up failed:", error);
       toast.error("Google sign up failed. Please try again.");

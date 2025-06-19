@@ -49,7 +49,6 @@ export async function PATCH(
     const body = await req.json();
     
     const { tags, ...linkData } = body;
-    
     const existingLink = await prisma.link.findUnique({
       where: { id },
       include: { tags: true }
@@ -76,11 +75,10 @@ export async function PATCH(
       tagUpdateData = {
         disconnect: existingLink.tags.map(tag => ({ id: tag.id })),
         connectOrCreate: tags.map((tag: TagPropsTypes) => ({
-          where: { id: tag },
-          create: { 
-            id: tag,
-            name: tag, 
-            color: `#${Math.floor(Math.random()*16777215).toString(16)}` 
+          where: { name: tag },
+          create: {
+            name: tag,
+            color: `#${Math.floor(Math.random() * 16777215).toString(16)}`
           }
         }))
       };
