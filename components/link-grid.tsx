@@ -207,7 +207,7 @@ export default function LinkGrid({
               {(searchQuery || selectedTag || filters.domain) && (
                 <button
                   onClick={clearFilters}
-                  className="text-xs underline text-slate-500 dark:text-slate-400"
+                  className="text-xs underline text-slate-500 dark:text-slate-400 hover:cursor-pointer"
                 >
                   Clear all filters
                 </button>

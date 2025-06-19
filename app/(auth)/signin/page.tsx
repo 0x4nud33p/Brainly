@@ -39,7 +39,7 @@ export default function SignUpWithGoogle() {
         transition={{ duration: 0.5 }}
       >
         <button
-          className="w-full bg-indigo-600 text-white border border-black p-3 rounded-lg flex items-center justify-center hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full bg-indigo-600 text-white border border-black p-3 rounded-lg flex items-center justify-center hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed hover:cursor-pointer"
           onClick={handleGoogleSignUp}
           disabled={loading}
         >
