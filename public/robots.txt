@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://brainlyapp.vercel.app/
+
+# Sitemaps
+Sitemap: https://brainlyapp.vercel.app/sitemap.xml

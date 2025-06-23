@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "prisma generate && next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postbuild": "next-sitemap"
   },
   "dependencies": {
     "@better-fetch/fetch": "^1.1.18",
@@ -21,6 +22,8 @@
     "lucide-react": "^0.503.0",
     "next": "^15.3.1",
     "next-auth": "^4.24.11",
+    "next-seo": "^6.8.0",
+    "next-sitemap": "^4.2.3",
     "postcss": "^8.5.3",
     "prisma": "^6.6.0",
     "react": "^19.0.0",

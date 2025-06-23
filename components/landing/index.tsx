@@ -180,7 +180,11 @@ const LandingPage = () => {
             transition={{ delay: 0.2 }}
             className="flex flex-col sm:flex-row gap-4 justify-center"
           >
-            <Link href="/dashboard" className="w-full sm:w-auto">
+            <Link
+              href="/dashboard"
+              prefetch={true}
+              className="w-full sm:w-auto"
+            >
               <button className="w-full sm:w-auto bg-white text-indigo-600 hover:bg-slate-100 px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all text-sm sm:text-base">
                 Get Started Free
                 <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5" />

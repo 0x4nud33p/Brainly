@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
-import { Link, ArrowRight, Star, Search, LayoutDashboard, Folder, Globe, Smartphone, BookOpen, BarChart, Zap, Users } from 'lucide-react';
+import { ArrowRight, Star, Search, LayoutDashboard, Folder, Globe, Smartphone, BookOpen, BarChart, Zap, Users } from 'lucide-react';
+import Link from 'next/link';
 import React from 'react'
 
 const fadeInUp = {
@@ -52,7 +53,11 @@ export const Hero = () => {
           </motion.p>
 
           <motion.div {...fadeInUp} className="flex flex-col sm:flex-row gap-4">
-            <Link href="/dashboard" className="w-full sm:w-auto">
+            <Link
+              href="/dashboard"
+              className="w-full sm:w-auto"
+              prefetch={true}
+            >
               <button className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-8 py-4 rounded-xl font-medium flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-indigo-200 dark:hover:shadow-indigo-900/30 transition-all">
                 Start Organizing
                 <ArrowRight className="h-5 w-5" />

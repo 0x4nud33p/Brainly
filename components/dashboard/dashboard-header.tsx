@@ -52,7 +52,7 @@ export default function DashboardHeader() {
           >
             {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
-          <Link href="/dashboard" className="flex items-center">
+          <Link href="/dashboard" prefetch={true} className="flex items-center">
             <span className="text-xl font-bold text-indigo-600 dark:text-indigo-400">
               Brainly
             </span>
@@ -74,9 +74,9 @@ export default function DashboardHeader() {
                 className="w-full pl-10 pr-4 py-2 border border-slate-200 dark:border-slate-700 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-slate-800 dark:text-white"
               />
             </div>
-            <button 
-            className="ml-2 p-2 rounded-md hover:cursor-pointer text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
-            onClick={() => handleShare()}
+            <button
+              className="ml-2 p-2 rounded-md hover:cursor-pointer text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
+              onClick={() => handleShare()}
             >
               <Share2 />
             </button>
@@ -94,7 +94,7 @@ export default function DashboardHeader() {
                   className="h-6 w-6 rounded-full"
                 />
               ) : ( */}
-                <User className="h-5 w-5 text-slate-600 dark:text-slate-300" />
+              <User className="h-5 w-5 text-slate-600 dark:text-slate-300" />
               {/* )} */}
             </button>
 
